@@ -25,8 +25,36 @@ export const getRecommend = () => {
   })
 }
 
-//获取新推荐
+//获取歌手
+export const getSinger = () => {
+  const url = `https://c.y.qq.com/v8/fcg-bin/v8.fcg`
+  // const url = `/musicapi/getSinger`
+  const params = {
+    channel: 'singer',
+    page: 'list',
+    key: 'all_all_all',
+    pagesize: 200, //每页个数
+    pagenum: 1, //页数
+    g_tk: 5381,
+    jsonpCallback: 'GetSingerListCallback',
+    loginUin: 0,
+    hostUin: 0,
+    format: 'jsonp',
+    inCharset: 'utf8',
+    outCharset: 'utf-8',
+    notice: 0,
+    platform: 'yqq',
+    needNewCode: 0,
+  }
+  return jsonp(url, params, 'GetSingerListCallback')
+    .then(res => {
+      return Promise.resolve(res)
+    }).catch(err => {
+      console.log(err);
+    })
+}
 
+//获取新推荐
 export const getRecomList = () => {
   const url = `https://u.y.qq.com/cgi-bin/musicu.fcg`
   const params = {
@@ -43,7 +71,7 @@ export const getRecomList = () => {
     needNewCode: 0,
     data: `{"comm":{"ct":24},"recomPlaylist":{"method":"get_hot_recommend","param":{"async":1,"cmd":2},"module":"playlist.HotRecommendServer"}}`
   }
-  return jsonp(url, params,'recom3586467689739101')
+  return jsonp(url, params, 'recom3586467689739101')
     .then(res => {
       //   console.log(res);
       return Promise.resolve(res.recomPlaylist.data.v_hot)
@@ -75,7 +103,7 @@ export const getRecomDisst = (disstid) => {
   return axios.get(url, {
     params
   }).then(res => {
-    let ret = JSON.parse(res.data.replace(/^playlistinfoCallback\(/,'').replace(/\)$/,''))
+    let ret = JSON.parse(res.data.replace(/^playlistinfoCallback\(/, '').replace(/\)$/, ''))
     return Promise.resolve(ret)
   }).catch(err => {
     console.log(err);
@@ -105,6 +133,32 @@ export const searchMusic = (keywords, p) => {
     n: 20, //一次搜索显示数量
     p: p, //显示第几页
     remoteplace: `txt.mqq.all`,
+    _: Date.now(),
+  }
+  return axios.get(url, {
+    params
+  }).then(res => {
+    return Promise.resolve(res)
+  }).catch(err => {
+    console.log(err);
+  })
+}
+export const getSingerInfo = (keywords, p) => {
+  const url = `/musicapi/getSingerInfo`
+  const params = {
+    singerid: 5062,  //歌手ID
+    g_tk: 5381,
+    uin: 0,
+    format: 'json',
+    inCharset: 'utf - 8',
+    outCharset: 'utf - 8',
+    notice: 0,
+    platform: 'h5page',
+    needNewCode: 1,
+    order: 'listen',
+    from: 'h5',
+    num: 15,  // 歌曲个数
+    begin: 0,
     _: Date.now(),
   }
   return axios.get(url, {

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <music-header></music-header>
+    <!-- <music-header></music-header> -->
     <music-body></music-body>
     <player></player>
   </div>

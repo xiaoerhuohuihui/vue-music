@@ -49,14 +49,13 @@ export default {
       this.$emit('percent',percent)
     },
     barStartProgress(e){
-      
       this.moving = true
       this.progressWidth = this.$refs.progressBody.clientWidth
       this.progressBarWidth = this.$refs.progressBar.clientWidth/2
     },
     barMoveProgress(e){
       this.moveProgress =
-        e.touches[0].pageX - this.$refs.progressBody.offsetLeft - this.progressBarWidth;
+      e.touches[0].pageX - this.$refs.progressBody.offsetLeft - this.progressBarWidth;
       this.percent = Math.min(this.moveProgress, this.progressWidth)  / Math.max(this.moveProgress,this.progressWidth)
       this.hasdone = Math.ceil(this.percent*100) + "%";
     },

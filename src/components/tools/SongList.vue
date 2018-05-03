@@ -71,7 +71,6 @@ export default {
         let nextScroll = (this.getPlayIndex)*document.documentElement.clientHeight/10
         this.$refs.scrollUl.scrollTop = nextScroll
       }
-      //哈哈哈哈
     }
   }
 };
@@ -79,7 +78,8 @@ export default {
 
 <style scoped>
 .songinfo {
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
+  overflow: auto;
   height: 100%;
   width: 100%;
 }

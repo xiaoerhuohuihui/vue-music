@@ -111,6 +111,16 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           console.log(e)
         })
       }),
+      app.get('/musicapi/getSingerInfo',(req,res)=>{
+        let url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
+        axios.get(url,{
+          params:req.query
+        }).then(response=>{
+          res.json(response.data)
+        }).catch(e=>{
+          console.log(e)
+        })
+      }),
       app.get('/musicapi/getVkeys',(req,res)=>{
         let url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url,{
