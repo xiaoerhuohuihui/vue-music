@@ -106,11 +106,10 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     getSinger()
       .then(res => {
         this.singerList = this.getSingerList(res.data.list);
-        //console.log(this.singerList);
         this.singerList.map(item => {
           if (item.title == "hot") {
             this.fastList.push("热");
@@ -118,7 +117,6 @@ export default {
             this.fastList.push(item.title);
           }
         });
-        // console.log(this.fastList);
       })
       .catch(e => {
         console.log(e);

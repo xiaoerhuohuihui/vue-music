@@ -28,7 +28,6 @@ export default {
       title:'',
     };
   },
-  methods: {},
   created() {
     getTopMusicList(this.$route.params.id)
       .then(res => {
@@ -36,7 +35,6 @@ export default {
           this.list.push(item.data)
         })
         this.title = res.data.topinfo.ListName
-        
       })
       .catch(e => {
         console.log(e);
@@ -51,8 +49,6 @@ export default {
   components: {
     SongList
   },
-  watch: {
-  }
 };
 </script>
 
@@ -65,12 +61,12 @@ export default {
   right: 0; */
   width: 100%;
   height: 88%;
-  z-index: 11;
+  z-index: 199;
   background-color: rgb(255, 255, 255);
 }
 .music-list-header {
   position: absolute;
-  z-index: 99;
+  z-index: 199;
   height: 10vh;
   width: 100%;
   font-size: 20px;

@@ -39,7 +39,7 @@ export default {
     top: 0vh;
     height: 7.8vh;
     width: 100%;
-    z-index: 9999;
+    z-index: 188;
 }
 ul{
     height: 100%;
