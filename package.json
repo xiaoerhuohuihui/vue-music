@@ -2,7 +2,7 @@
   "name": "vue-music",
   "version": "1.0.0",
   "description": "xiaohuihui's vue-music",
-  "author": "HYP <1561470515@qq.com>",
+  "author": "xiaoerhuohuihui <1561470515@qq.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --open --inline --progress --config build/webpack.dev.conf.js",
