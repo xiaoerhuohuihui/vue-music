@@ -28,7 +28,7 @@ export default {
     getDiss(id){
         getRecomDisst(id).then(res=>{
             this.dissList = res.cdlist[0].songlist
-            // console.log(this.dissList);
+            console.log(this.dissList);
             // this.$store.dispatch('addMusic', this.dissList)
         }).catch(e=>{
             console.log(e);
