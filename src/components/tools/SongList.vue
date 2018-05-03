@@ -15,7 +15,7 @@
             </div>
             </div>
             <div class="bg-img">
-              <img :src="geturl(item.albummid)" alt="">
+              <img :src="geturl(item.albummid) " alt="">
             </div>
         </li>
         </transition-group>
@@ -28,7 +28,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      isactive:false
+      isactive:false,
     };
   },
   props:{
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     loadMore() {},
-    geturl: function(id) {
+    geturl(id) {
       return getalbumimgurl(id);
     },
     zeroNum(index) {

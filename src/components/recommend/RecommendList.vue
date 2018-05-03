@@ -13,6 +13,7 @@
 
 <script type="text/ecmascript-6">
 import { getRecomDisst } from "@/api/api";
+import { getPlayMusicList } from "@/store/index";
 export default {
   data() {
     return {
@@ -28,9 +29,8 @@ export default {
     getDiss(id){
         getRecomDisst(id).then(res=>{
             this.dissList = res.cdlist[0].songlist
-            console.log(this.dissList);
-            //...
-            // this.$store.dispatch('addMusic', this.dissList)
+            
+            this.$store.dispatch('addMusic', this.dissList)
         }).catch(e=>{
             console.log(e);
         })

@@ -89,6 +89,14 @@ const mutations = {
     state.musicDuration = payload
   },
   changePlayMusicList(state, payload) {
+    if (payload.length > 1) {
+      payload.map(item=>{
+        state.playMusicList.push(item)
+      })
+      // console.log(state.playMusicList);
+      return
+      // state.playMusicList = [...state.playMusicList, payload]
+    }
     //判断普通列表里面是否含有相同歌曲
     let len = state.playMusicList.filter(item => {
       return item.songmid == payload.songmid 
@@ -98,6 +106,9 @@ const mutations = {
     }
   },
   changePlayMusic(state, payload) {
+    if (payload.length > 1) {
+      payload = payload[0]
+    }
     state.playMusic = payload
     state.musicPicUrl = getalbumimgurl(payload.albummid)
     state.musicName = payload.songname
