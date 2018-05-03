@@ -71,6 +71,7 @@ export default {
         let nextScroll = (this.getPlayIndex)*document.documentElement.clientHeight/10
         this.$refs.scrollUl.scrollTop = nextScroll
       }
+      //哈哈哈哈
     }
   }
 };
