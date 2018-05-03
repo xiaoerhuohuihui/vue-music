@@ -12,20 +12,27 @@ const state = {
   musicPicUrl: 'http://p.qpic.cn/music_cover/Ay2w92PeiaO57pZWMwecv6ZcgIbXzbpgviav55UXfrRibjZzicjyhciah7A/600?n=1',
   musicName: '小灰灰',
   musicSinger: [],
-  tempMsicList: [],
   myMusicList: [],
   playMusicList: [],
   playMusic: {},
+  playIndex: 0,
   audio: {},
   musicDuration: 0,
   ispause: false,
   num:0,
-  loop:'danqu'
+  loop:'danqu',
+  
 }
 
 const getters = {
   getMusicUrl(state) {
     return state.musicUrl
+  },
+  getPlayIndex(state) {
+    return state.playIndex
+  },
+  getPlayMusicList(state) {
+    return state.playMusicList
   },
   getnum(state) {
     return state.num
@@ -51,16 +58,13 @@ const getters = {
   getPlayMusic(state) {
     return state.playMusic
   },
-  getTempMusicList(state) {
-    return state.tempMsicList
-  },
   getAudio(state) {
     return state.audio
   },
   getPlayMusicSongmid(state){
-    if (state.playMusic.hasOwnProperty('data')) {
-      return state.playMusic.data.songmid
-    }
+    // if (state.playMusic.hasOwnProperty('data')) {
+      return state.playMusic.songmid
+    // }
   }
 }
 
@@ -68,6 +72,9 @@ const mutations = {
 
   changeUrl(state, payload) {
     state.musicUrl = payload
+  },
+  changePlayIndex(state, payload) {
+    state.playIndex = payload
   },
   changenum(state, payload) {
     state.num = payload
@@ -81,20 +88,20 @@ const mutations = {
   changeMusicDuration(state, payload) {
     state.musicDuration = payload
   },
-  changePlayMusic(state, payload) {
-    state.playMusic = payload
-    state.musicPicUrl = getalbumimgurl(payload.data.albummid)
-    state.musicName = payload.data.songname
-    state.musicSinger = payload.data.singer
-  },
-  changeTempMusicList(state, payload) {
+  changePlayMusicList(state, payload) {
     //判断普通列表里面是否含有相同歌曲
-    let len = state.tempMsicList.filter(item => {
-      return item.data.songid == payload.data.songid
+    let len = state.playMusicList.filter(item => {
+      return item.songmid == payload.songmid 
     }).length
     if (len == 0) {
-      state.tempMsicList.push(payload)
+      state.playMusicList.push(payload)
     }
+  },
+  changePlayMusic(state, payload) {
+    state.playMusic = payload
+    state.musicPicUrl = getalbumimgurl(payload.albummid)
+    state.musicName = payload.songname
+    state.musicSinger = payload.singer
   },
   setAudio(state, payload) {
     state.audio = payload
@@ -112,7 +119,7 @@ const actions = {
     state,
     commit
   }, payload) {
-    commit('changeTempMusicList', payload)
+    commit('changePlayMusicList', payload)
     commit('changePlayMusic', payload)
   }
 }

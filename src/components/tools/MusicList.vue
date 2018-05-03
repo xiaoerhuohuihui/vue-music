@@ -19,32 +19,39 @@
 <script type="text/ecmascript-6">
 import { getalbumimgurl, getTopMusicList } from "@/api/api";
 import SongList from "../tools/SongList";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
       backgroundImg: "",
       list:[],
-      title:''
+      title:'',
     };
   },
   methods: {},
   created() {
     getTopMusicList(this.$route.params.id)
       .then(res => {
-        this.list = res.data.songlist;
+        res.data.songlist.map(item=>{
+          this.list.push(item.data)
+        })
         this.title = res.data.topinfo.ListName
+        
       })
       .catch(e => {
         console.log(e);
       });
-    // if (this.songlist.length <= 0) {
-      
-    // }
-    
-    
+  },
+  computed: {
+    ...mapGetters({
+      getPlayMusicList: "getPlayMusicList",
+      getPlayMusic: "getPlayMusic",
+    }),
   },
   components: {
     SongList
+  },
+  watch: {
   }
 };
 </script>

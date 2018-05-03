@@ -26,10 +26,10 @@ export default {
   },
   methods: {
     getDiss(id){
-        console.log(2);
-                
         getRecomDisst(id).then(res=>{
             this.dissList = res.cdlist[0].songlist
+            // console.log(this.dissList);
+            // this.$store.dispatch('addMusic', this.dissList)
         }).catch(e=>{
             console.log(e);
         })

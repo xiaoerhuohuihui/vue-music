@@ -1,36 +1,45 @@
 <template>
-    <ul class="songinfo" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
+    <ul class="songinfo" ref="scrollUl" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
       <transition-group name='songLi'>
-        <li @click.stop="playMusic(item)"  class="song "  
+        <li ref="scrollLi" @click.stop="playMusic(item)"  class="song "  
         v-for="(item, index) in songlist" :key="index">
-            <div class="wrap" :class="{active:item.data.songmid==getPlayMusicSongmid}">
+            <div class="wrap" :class="{active:item.songmid==getPlayMusicSongmid}">
               <div class="num-div">
                 {{zeroNum(index)}}
             </div>
             <div class="info-div">
-                <p>{{item.data.songname}}</p>
-                <span v-for="(name, index) in item.data.singer" :key="index">
+                <p>{{item.songname}}</p>
+                <span v-for="(name, index) in item.singer" :key="index">
                     {{name.name}}
                 </span>
             </div>
             </div>
             <div class="bg-img">
-              <img :src="geturl(item.data.albummid)" alt="">
+              <img :src="geturl(item.albummid)" alt="">
             </div>
         </li>
         </transition-group>
-        <!-- :style="{backgroundImage:'url(' + geturl(item.data.albummid) +')' }" -->
     </ul>
 </template>
 
 <script type="text/ecmascript-6">
 import { getalbumimgurl } from "@/api/api";
-import { getTempMusicList, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
       isactive:false
     };
+  },
+  props:{
+    songlist: {
+      type: Array,
+      default: []
+    },
+    isShowPlayList: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     loadMore() {},
@@ -46,24 +55,22 @@ export default {
     },
     playMusic(item){
       this.$store.dispatch('addMusic',item)
-    }
+    },
   },
   computed: {
     ...mapGetters({
-      getTempMusicList:'getTempMusicList',
-      getPlayMusic:'getPlayMusic',
       getPlayMusicSongmid:'getPlayMusicSongmid',
+      getPlayIndex:'getPlayIndex',
+      getPlayMusic:'getPlayMusic',
+      getPlayMusicList:'getPlayMusicList',
     })
   },
-  props: {
-    songlist: {
-      type: Array,
-      default: []
-    }
-  },
   watch: {
-    getPlayMusic(){
-
+    isShowPlayList(newIsShow){
+      if (newIsShow) {
+        let nextScroll = (this.getPlayIndex)*document.documentElement.clientHeight/10
+        this.$refs.scrollUl.scrollTop = nextScroll
+      }
     }
   }
 };
@@ -76,7 +83,7 @@ export default {
   width: 100%;
 }
 .song {
-  height: 15%;
+  height: 10vh;
   margin: 5px 0;
   width: 100%;
   font-size: 18px;
@@ -86,9 +93,10 @@ export default {
 .wrap{
   /* flex: 1; */
   width: 80%;
-  padding: 10px 20px;
+  padding: 0 20px;
   display: flex;
-  
+  justify-content: center;
+  align-items: center;
 }
 .bg-img{
   width: 20%;

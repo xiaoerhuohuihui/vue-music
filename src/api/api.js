@@ -163,6 +163,7 @@ export const getTopList = () => {
   }).then(res => {
     return Promise.resolve(res.data.data.topList)
   }).catch(err => {
+    alert(err)
     console.log(err);
   })
 }

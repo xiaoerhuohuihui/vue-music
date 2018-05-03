@@ -1,35 +1,38 @@
 <template>
-    <div class="play-list">
-        <div class="wrap">
-        </div>
-
-        <div class="song-list" @click.stop="chang">
-                <song-list :songlist='getTempMusicList'></song-list>
-        </div>
-
-            <div class="control" @click.stop="change">
-                <music-progress @percent='getPercent' :done='progress' :start='getTime' :end='getDuration'></music-progress>
-                <div class="control-music">
-                    <div class="control-loop" @click="changeLoop">
-                        <img v-if="loopList[getnum]=='danqu'" class="loop" src="@/assets/danqu.png" alt="">
-                        <img v-else-if="loopList[getnum]=='liebiao'" class="loop" src="@/assets/liebiao.png" alt="">
-                        <img v-else-if="loopList[getnum]=='suiji'" class="loop" src="@/assets/suiji.png" alt="">
-                    </div>
-                    <div class="control-body">
-                        <div class="control-prev" @click="prev">
-                            <img src="@/assets/prev.png" alt="">
-                        </div>
-                        <div class="control-play" @click="isplay">
-                            <img v-if="getIspause" src="@/assets/pause.png" alt="">
-                            <img v-else src="@/assets/play.png" alt="">
-                        </div>
-                        <div class="control-next" @click="next">
-                            <img src="@/assets/next.png" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="play-list">
+    <div class="wrap">
     </div>
+    <div class="bg-album">
+      <img class="bg-album-img" :src="getMusicPicUrl" alt="">
+      <!-- <img class="bg-album-img" src="https://y.gtimg.cn/music/photo_new/T002R300x300M000001nKRSt1ygmNs.jpg?max_age=2592000" alt=""> -->
+    </div>
+    <div class="song-list" ref="songListDiv" @click.stop="chang">
+      <song-list :isShowPlayList='isShowPlayList' :songlist='getPlayMusicList'></song-list>
+    </div>
+
+    <div class="control" @click.stop="change">
+      <music-progress @percent='getPercent' :done='progress' :start='getTime' :end='getDuration'></music-progress>
+      <div class="control-music">
+        <div class="control-loop" @click="changeLoop">
+          <img v-if="loopList[getnum]=='danqu'" class="loop" src="@/assets/danqu.png" alt="">
+          <img v-else-if="loopList[getnum]=='liebiao'" class="loop" src="@/assets/liebiao.png" alt="">
+          <img v-else-if="loopList[getnum]=='suiji'" class="loop" src="@/assets/suiji.png" alt="">
+        </div>
+        <div class="control-body">
+          <div class="control-prev" @click="prev">
+            <img src="@/assets/prev.png" alt="">
+          </div>
+          <div class="control-play" @click="isplay">
+            <img v-if="getIspause" src="@/assets/pause.png" alt="">
+            <img v-else src="@/assets/play.png" alt="">
+          </div>
+          <div class="control-next" @click="next">
+            <img src="@/assets/next.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -40,7 +43,7 @@ export default {
   data() {
     return {
       progress: 0,
-      loopList: ["danqu", "liebiao", "suiji"]
+      loopList: ["danqu", "liebiao", "suiji"],
     };
   },
   props: {
@@ -48,9 +51,9 @@ export default {
       type: Number,
       default: 0
     },
-    playIndex: {
-      type: Number,
-      default: 0
+    isShowPlayList:{
+      type:Boolean,
+      default:false
     }
   },
   methods: {
@@ -59,33 +62,29 @@ export default {
     prev() {
       if (this.getLoop == "liebiao" || this.getLoop == "danqu") {
         let nextIndex = 0;
-        if (this.playIndex == 0) {
-          nextIndex = this.getTempMusicList.length - 1;
+        if (this.getPlayIndex == 0) {
+          nextIndex = this.getPlayMusicList.length - 1;
         } else {
-          nextIndex = (this.playIndex - 1) % this.getTempMusicList.length;
+          nextIndex = (this.getPlayIndex - 1) % this.getPlayMusicList.length;
         }
-        console.log(nextIndex);
-
-        console.log(this.getTempMusicList[nextIndex]);
-        this.$store.commit("changePlayMusic", this.getTempMusicList[nextIndex]);
+        this.$store.commit("changePlayMusic", this.getPlayMusicList[nextIndex]);
       } else if (this.getLoop == "suiji") {
         let nextIndex = parseInt(
-          Math.random() * (this.getTempMusicList.length - 1)
+          Math.random() * (this.getPlayMusicList.length - 1)
         );
-        this.$store.commit("changePlayMusic", this.getTempMusicList[nextIndex]);
+        this.$store.commit("changePlayMusic", this.getPlayMusicList[nextIndex]);
       }
     },
     next() {
       if (this.getLoop == "liebiao" || this.getLoop == "danqu") {
-        let nextIndex = (this.playIndex + 1) % this.getTempMusicList.length;
-        console.log(this.getTempMusicList[nextIndex]);
-        this.$store.commit("changePlayMusic", this.getTempMusicList[nextIndex]);
+        let nextIndex = (this.getPlayIndex + 1) % this.getPlayMusicList.length;
+        // console.log(this.getPlayMusicList[nextIndex]);
+        this.$store.commit("changePlayMusic", this.getPlayMusicList[nextIndex]);
       } else if (this.getLoop == "suiji") {
         let nextIndex = parseInt(
-          Math.random() * (this.getTempMusicList.length - 1)
+          Math.random() * (this.getPlayMusicList.length - 1)
         );
-        this.$store.commit("changePlayMusic", this.getTempMusicList[nextIndex]);
-        console.log(nextIndex);
+        this.$store.commit("changePlayMusic", this.getPlayMusicList[nextIndex]);
       }
     },
     changeLoop() {
@@ -123,12 +122,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getTempMusicList: "getTempMusicList",
+      getPlayMusicList: "getPlayMusicList",
       getAudio: "getAudio",
       getMusicDuration: "getMusicDuration",
       getIspause: "getIspause",
       getnum: "getnum",
-      getLoop: "getLoop"
+      getLoop: "getLoop",
+      getMusicPicUrl: "getMusicPicUrl",
     }),
     getDuration() {
       if (!isNaN(this.getMusicDuration)) {
@@ -146,7 +146,7 @@ export default {
   watch: {
     currentTime() {
       this.progress = this.currentTime / this.getAudio.duration * 100;
-    }
+    },
   }
 };
 </script>
@@ -159,7 +159,6 @@ export default {
   bottom: 0;
   right: 0;
   z-index: 9999;
-  /* background: deepskyblue; */
 }
 .wrap {
   position: absolute;
@@ -167,15 +166,40 @@ export default {
   left: 0;
   bottom: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.123);
+}
+.bg-album{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40vh;
+  z-index: 66;
+  background-color: rgb(215, 255, 248);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bg-album-img{
+  width: 40vh;
+  height: 40vh;
+  border-radius: 50%;
+  animation: rotateImg 12s linear infinite;
+}
+@keyframes rotateImg {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 .song-list {
   position: absolute;
   bottom: 15vh;
   left: 0;
   width: 100%;
-  height: 55vh;
-  background: rgb(255, 255, 255);
+  height: 45vh;
+  background: rgb(215, 255, 248);
   overflow: hidden;
 }
 .control {
@@ -195,7 +219,6 @@ export default {
 .control-loop {
   width: 15vw;
   height: 100%;
-  /* background-color: blueviolet; */
   display: flex;
   justify-content: center;
   align-items: center;
