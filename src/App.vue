@@ -41,6 +41,8 @@ body{
   width: 100%;
   height: 50vh;
   overflow: auto;
+  color: black;
+  background-color: rgb(238, 253, 251);
 }
 image[lazy=loading] {
   width: 40px;

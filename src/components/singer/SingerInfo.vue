@@ -60,7 +60,6 @@ export default {
       this.showInfo = true;
     },
     closeToast() {
-      console.log(1);
       this.showInfo = false;
       this.myToast.close();
     },
@@ -125,7 +124,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* padding: 10px; */
 }
 .singer-img img {
   padding: 10px;
@@ -152,7 +150,7 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 999;
-  background: rgba(0, 0, 0, 0.801);
+  background: rgba(12, 12, 12, 0.212);
 }
 .singer-info-body {
   width: 100%;
