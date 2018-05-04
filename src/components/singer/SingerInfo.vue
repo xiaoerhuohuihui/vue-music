@@ -10,9 +10,10 @@
     <div class="singer-info-body">
       <div class="singer-img">
         <img :src="singerImg" alt="">
-        <p class="singer-info-p">{{singerinfo}}</p>
+        <p class="singer-info-p" @click="getAllInfo">{{singerinfo}}</p>
         <!-- 点击显示详细信息 -->
       </div>
+      <div class="all-info-wrap"  @click.self="closeToast" v-if="showInfo"></div>
       <song-list :songlist='list'></song-list>
     </div>
   </div>
@@ -21,13 +22,15 @@
 <script type="text/ecmascript-6">
 import { getSingerInfo } from "@/api/api";
 import SongList from "../tools/SongList";
+import { Toast } from 'mint-ui';
 export default {
   data() {
     return {
       list:[],
       title:'',
       singerinfo:'',
-      singerImg:''
+      singerImg:'',
+      showInfo:false
     }
   },
   components: {
@@ -44,6 +47,19 @@ export default {
     getSingerImg(mid){
       return `https://y.gtimg.cn/music/photo_new/T001R150x150M000${mid}.jpg?max_age=2592000`
     },
+    getAllInfo(){
+     this.myToast = Toast({
+        message:this.singerinfo,
+        className:'all-info',
+        duration:-1
+      })
+      this.showInfo = true
+    },
+    closeToast(){
+      console.log(1);
+      this.showInfo = false
+      this.myToast.close()
+    }
   },
   created () {
     getSingerInfo(this.$route.params.id)
@@ -114,9 +130,14 @@ export default {
   -webkit-line-clamp:4; 
   /* 这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。 */
 }
-.toast-singerinfo{
+.all-info-wrap{
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 50vh;
+  height: 100%;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.801)
 }
 .singer-info-body{
   width: 100%;

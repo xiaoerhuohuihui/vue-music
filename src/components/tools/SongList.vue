@@ -1,7 +1,9 @@
 <template>
     <ul class="songinfo" ref="scrollUl" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
-      <transition-group name='songLi'>
-        <li ref="scrollLi" @click.stop="playMusic(item)"  class="song "  
+      <!-- <transition-group name='songLi'> -->
+        <li ref="scrollLi" @click.stop="playMusic(item)" 
+        :class="{toleft:index%2==1,toright:index%2==0}" 
+        class="song "  
         v-for="(item, index) in songlist" :key="index">
             <div class="wrap" :class="{active:item.songmid==getPlayMusicSongmid}">
               <div class="num-div">
@@ -18,7 +20,7 @@
               <img v-lazy="geturl(item.albummid) " alt="">
             </div>
         </li>
-        </transition-group>
+        <!-- </transition-group> -->
     </ul>
 </template>
 
@@ -137,6 +139,7 @@ export default {
   border-radius: 10%;
   box-shadow:1px 1px 10px #333333;
 }
+
 .songLi-enter-active,.songLi-leave-active{
   transition: all .3s ease;
 }

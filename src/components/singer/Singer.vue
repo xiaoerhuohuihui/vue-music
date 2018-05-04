@@ -4,7 +4,7 @@
       <div v-for="(data, index) in singerList" :key="index">
         <p class="title">{{getTitle(data.title)}}</p>
         <ul class="singer-ul">
-          <li @click="getSingerId(item.id)" class="singer-li" v-for="(item, index) in data.items" :key="index">
+          <li :class="{toleft:index%2==1,toright:index%2==0}" @click="getSingerId(item.id)" class="singer-li" v-for="(item, index) in data.items" :key="index">
             <div class="img-div">
               <img class="singer-img" v-lazy="item.img" alt="">
             </div>

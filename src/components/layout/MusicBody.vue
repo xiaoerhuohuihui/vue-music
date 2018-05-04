@@ -17,9 +17,9 @@
             </ul>
         </div>
         <keep-alive>
-            <transition name='view'>
+            <!-- <transition name='view'> -->
                 <router-view></router-view>
-            </transition>
+            <!-- </transition> -->
         </keep-alive>
     </div>
 </template>

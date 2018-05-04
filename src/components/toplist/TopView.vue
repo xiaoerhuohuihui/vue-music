@@ -1,6 +1,6 @@
 <template>
     <ul>
-        <li @click="getTopId(item)" class="topList-li" v-for="(item, index) in topList" :key="index">
+        <li :class="{toleft:index%2==1,toright:index%2==0}"  @click="getTopId(item)" class="topList-li" v-for="(item, index) in topList" :key="index">
             <div class="topListImg"><img :src="item.picUrl" :alt="item.topTitle"></div>
             <div class="topList-songList">
                 <div class="info">

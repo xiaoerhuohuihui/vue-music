@@ -1,7 +1,7 @@
 <template>
     <ul >
         <div class="recom-news"><h2>推荐热歌</h2></div>
-        <li @click="getDiss(item.content_id)" class="recomLi" v-for="(item, index) in recomList" :key="index">
+        <li :class="{toleft:index%2==1,toright:index%2==0}" @click="getDiss(item.content_id)" class="recomLi" v-for="(item, index) in recomList" :key="index">
             <div class="recomImg-div"><img v-lazy="item.cover" class="recomImg" alt=""></div>
             <div class="recomTitle-div">
                 <h3>{{item.title}}</h3>

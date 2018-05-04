@@ -37,20 +37,38 @@ body{
 #app {
   position: relative;
 }
-.view-enter-active,.view-leave-active {
-  transition: all .6s ease;
-}
-.view-enter{
-  transform: translateX(100%);
-  opacity: 0;
-}
-.view-leave-to {
-  transform: translateX(-100%);
-  opacity: 0;
+.all-info{
+  width: 100%;
+  height: 50vh;
+  overflow: auto;
 }
 image[lazy=loading] {
   width: 40px;
   height: 300px;
   margin: auto;
+}
+.toleft{
+  /* transition: all .3s linear; */
+  animation: Toleft .5s linear ;
+}
+.toright{
+  /* transition: all .3s linear; */
+  animation: Toright .5s linear ;
+}
+@keyframes Toleft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: 0;
+  }
+}
+@keyframes Toright {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: 0;
+  }
 }
 </style>
