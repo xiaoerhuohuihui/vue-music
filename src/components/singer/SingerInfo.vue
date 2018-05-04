@@ -13,8 +13,8 @@
         <p class="singer-info-p" @click="getAllInfo">{{singerinfo}}</p>
         <!-- 点击显示详细信息 -->
       </div>
-      <div class="all-info-wrap"  @click.self="closeToast" v-if="showInfo"></div>
-      <song-list :songlist='list'></song-list>
+      <div class="all-info-wrap" @click.self="closeToast" v-if="showInfo"></div>
+      <song-list class="songlist" @getMoreMusic='getMoreMusic' :showMore='isShowMore' :songlist='list'></song-list>
     </div>
   </div>
 </template>
@@ -22,62 +22,78 @@
 <script type="text/ecmascript-6">
 import { getSingerInfo } from "@/api/api";
 import SongList from "../tools/SongList";
-import { Toast } from 'mint-ui';
+import { Toast } from "mint-ui";
 export default {
   data() {
     return {
-      list:[],
-      title:'',
-      singerinfo:'',
-      singerImg:'',
-      showInfo:false
-    }
+      list: [],
+      title: "",
+      singerinfo: "",
+      singerImg: "",
+      showInfo: false,
+      allLoaded: false,
+      n:15,
+      allSongNo:0,
+      isShowMore:true,
+    };
   },
   components: {
-    SongList,
+    SongList
   },
   methods: {
-    getSingerList(list){
-      let newList = []
-      list.map(item=>{
-        newList.push(item.musicData)
-      })
-      return newList
+    getSingerList(list) {
+      let newList = [];
+      list.map(item => {
+        newList.push(item.musicData);
+      });
+      return newList;
     },
-    getSingerImg(mid){
-      return `https://y.gtimg.cn/music/photo_new/T001R150x150M000${mid}.jpg?max_age=2592000`
+    getSingerImg(mid) {
+      return `https://y.gtimg.cn/music/photo_new/T001R150x150M000${mid}.jpg?max_age=2592000`;
     },
-    getAllInfo(){
-     this.myToast = Toast({
-        message:this.singerinfo,
-        className:'all-info',
-        duration:-1
-      })
-      this.showInfo = true
+    getAllInfo() {
+      this.myToast = Toast({
+        message: this.singerinfo,
+        className: "all-info",
+        duration: -1
+      });
+      this.showInfo = true;
     },
-    closeToast(){
+    closeToast() {
       console.log(1);
-      this.showInfo = false
-      this.myToast.close()
-    }
-  },
-  created () {
-    getSingerInfo(this.$route.params.id)
+      this.showInfo = false;
+      this.myToast.close();
+    },
+    _getSingerInfo(id,n){
+      getSingerInfo(id, n)
       .then(res => {
-        this.list = this.getSingerList(res.data.list)
-        this.singerImg = this.getSingerImg(res.data.singer_mid)
-        this.title = res.data.singer_name
-        this.singerinfo = res.data.SingerDesc
+        this.list = this.getSingerList(res.data.list);
+        this.singerImg = this.getSingerImg(res.data.singer_mid);
+        this.title = res.data.singer_name;
+        this.singerinfo = res.data.SingerDesc;
+        this.allSongNo = res.data.total
       })
       .catch(e => {
         console.log(e);
       });
+    },
+    getMoreMusic(){
+      if (this.n <= this.allSongNo) {
+        this.n += 15
+        this._getSingerInfo(this.$route.params.id, this.n)
+        return
+      }
+      this.isShowMore = false
+    },
+  },
+  created() {
+    this._getSingerInfo(this.$route.params.id, this.n)
   }
-}
+};
 </script>
 
 <style scoped>
-.singer-info{
+.singer-info {
   position: fixed;
   top: 0;
   left: 0;
@@ -104,42 +120,41 @@ export default {
 .singer-info-header span {
   font-size: 16px;
 }
-.singer-img{
+.singer-img {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   /* padding: 10px; */
 }
-.singer-img img{
+.singer-img img {
   padding: 10px;
   width: 25vh;
   height: 25vh;
   border-radius: 15%;
-  
 }
-.singer-info-p{
+.singer-info-p {
   margin: 10px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: wrap;
-  display:-webkit-box; 
+  display: -webkit-box;
   /* 将对象作为弹性伸缩盒子模型显示。 */
-  -webkit-box-orient:vertical;
+  -webkit-box-orient: vertical;
   /* 从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式） */
-  -webkit-line-clamp:4; 
+  -webkit-line-clamp: 4;
   /* 这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。 */
 }
-.all-info-wrap{
+.all-info-wrap {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 999;
-  background: rgba(0, 0, 0, 0.801)
+  background: rgba(0, 0, 0, 0.801);
 }
-.singer-info-body{
+.singer-info-body {
   width: 100%;
   position: absolute;
   top: 10vh;

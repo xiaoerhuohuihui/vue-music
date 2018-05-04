@@ -8,7 +8,7 @@
       </router-link>
     </mt-header>
     <div class="music-list-body">
-      <song-list :songlist='list'></song-list>
+        <song-list :songlist='list'></song-list>
     </div>
   </div>
 </template>
@@ -20,17 +20,17 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      list:[],
-      title:'',
+      list: [],
+      title: ""
     };
   },
   created() {
     getTopMusicList(this.$route.params.id)
       .then(res => {
-        res.data.songlist.map(item=>{
-          this.list.push(item.data)
-        })
-        this.title = res.data.topinfo.ListName
+        res.data.songlist.map(item => {
+          this.list.push(item.data);
+        });
+        this.title = res.data.topinfo.ListName;
       })
       .catch(e => {
         console.log(e);
@@ -38,7 +38,7 @@ export default {
   },
   components: {
     SongList
-  },
+  }
 };
 </script>
 
@@ -70,11 +70,11 @@ export default {
 .music-list-header span {
   font-size: 16px;
 }
-.music-list-body{
+.music-list-body {
   width: 100%;
   position: absolute;
   top: 10vh;
   height: 78vh;
+  overflow: scroll;
 }
-
 </style>

@@ -33,7 +33,7 @@ export const getSinger = () => {
     channel: 'singer',
     page: 'list',
     key: 'all_all_all',
-    pagesize: 200, //每页个数
+    pagesize: 400, //每页个数
     pagenum: 1, //页数
     g_tk: 5381,
     jsonpCallback: 'GetSingerListCallback',
@@ -143,7 +143,7 @@ export const searchMusic = (keywords, p) => {
     console.log(err);
   })
 }
-export const getSingerInfo = (singerid) => {
+export const getSingerInfo = (singerid,n=15) => {
   const url = `/musicapi/getSingerInfo`
   const params = {
     singerid: singerid,  //歌手ID
@@ -157,8 +157,8 @@ export const getSingerInfo = (singerid) => {
     needNewCode: 1,
     order: 'listen',
     from: 'h5',
-    num: 50,  // 歌曲个数
-    begin: 0,
+    num: n,  // 歌曲个数
+    begin: 0, //页数
     _: Date.now(),
   }
   return axios.get(url, {

@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <div ref='heightdiv' class="heightdiv">
-      <div v-for="(data, index) in singerList" :key="index">
+      <div v-for="(data, index) in singerList" class="singer-div" :key="index">
         <p class="title">{{getTitle(data.title)}}</p>
         <ul class="singer-ul">
           <li :class="{toleft:index%2==1,toright:index%2==0}" @click="getSingerId(item.id)" class="singer-li" v-for="(item, index) in data.items" :key="index">
@@ -14,7 +14,7 @@
       </div>
     </div>
     <ul class="fast-list" ref="fastList" @touchstart="getStartFastHeight" @touchmove="getMoveFastHeight">
-      <li @touchstart="getStartLi" class="fast-list-li" v-for="(item, index) in fastList" :key="index">
+      <li @touchstart="getStartLi(index, $event)" class="fast-list-li" v-for="(item, index) in fastList" :key="index">
         <span>{{item}}</span>
       </li>
     </ul>
@@ -60,49 +60,50 @@ export default {
         );
       });
       let hotList = [];
-      let sortList = [];
-
+      let NameList = [];
+      let otherList = [];
       for (const key in singerNewList) {
         if (singerNewList.hasOwnProperty(key)) {
           if (key == "hot") {
             hotList.push(singerNewList[key]);
+          } else if (key.match(/[a-zA-Z]/)) {
+            NameList.push(singerNewList[key]);
           } else {
-            sortList.push(singerNewList[key]);
+            otherList.push(singerNewList[key]);
           }
         }
       }
-      sortList.sort((a, b) => {
+      NameList.sort((a, b) => {
         return a.title.charCodeAt(0) - b.title.charCodeAt(0);
       });
-      return hotList.concat(sortList);
+      return hotList.concat(NameList, otherList);
     },
-    getStartLi(e) {
-      this.divHeight = this.$refs.heightdiv.clientHeight;
-      this.fastHeight = this.$refs.fastList.clientHeight;
-      this.fastTop = this.$refs.fastList.offsetTop - this.fastHeight / 2;
-      this.lastUl = document.querySelectorAll(".singer-ul")[
-        document.querySelectorAll(".singer-ul").length - 1
-      ];
-      this.percent = (e.touches[0].pageY - this.fastTop) / this.fastHeight;
-      this.scrollheight = parseInt(
-        this.percent * (this.divHeight - this.lastUl.clientHeight)
-      );
-      document.querySelector(".music-body").scrollTop = this.scrollheight;
+    getStartLi(index, e) {
+      this.height = 0;
+      for (let i = 1; i <= index; i++) {
+        this.height += document.querySelectorAll(".singer-div")[
+          i - 1
+        ].scrollHeight;
+      }
+      document.querySelector(".music-body").scrollTop = this.height;
     },
     getStartFastHeight(e) {
-      this.divHeight = this.$refs.heightdiv.clientHeight;
+      this.fastLiHeight = document.querySelector(".fast-list-li").clientHeight;
       this.fastHeight = this.$refs.fastList.clientHeight;
       this.fastTop = this.$refs.fastList.offsetTop - this.fastHeight / 2;
-      this.lastUl = document.querySelectorAll(".singer-ul")[
-        document.querySelectorAll(".singer-ul").length - 1
-      ];
     },
     getMoveFastHeight(e) {
-      this.percent = (e.touches[0].pageY - this.fastTop) / this.fastHeight;
-      this.scrollheight = parseInt(
-        this.percent * (this.divHeight - this.lastUl.clientHeight)
-      );
-      document.querySelector(".music-body").scrollTop = this.scrollheight;
+      this.percent =
+        Math.max(e.touches[0].pageY - this.fastTop, 0) &&
+        Math.min(e.touches[0].pageY - this.fastTop, this.fastHeight);
+      this.nowIndex = Math.floor(this.percent / this.fastLiHeight);
+      this.height = 0;
+      for (let i = 1; i <= this.nowIndex; i++) {
+        this.height += document.querySelectorAll(".singer-div")[
+          i - 1
+        ].scrollHeight;
+      }
+      document.querySelector(".music-body").scrollTop = this.height;
     },
     getTitle(title) {
       if (title == "hot") {
@@ -111,11 +112,11 @@ export default {
         return title;
       }
     },
-    getSingerId(id){
+    getSingerId(id) {
       // console.log(id);
       this.$router.push({
-        path:`/singer/${id}`
-      })
+        path: `/singer/${id}`
+      });
     }
   },
   created() {
@@ -144,7 +145,6 @@ export default {
 .title {
   line-height: 2;
   text-indent: 2em;
-  /* padding: 5px 0; */
   background-color: rgba(165, 248, 241, 0.623);
 }
 
@@ -152,15 +152,12 @@ export default {
   margin-bottom: 20px;
 }
 .singer-li {
-  /* padding: 2vh; */
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin: 4vh; */
 }
 .singer-name {
   flex: 1;
-  /* text-align: center; */
 }
 .img-div {
   padding: 2vh;

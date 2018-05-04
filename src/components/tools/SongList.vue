@@ -1,27 +1,26 @@
 <template>
-    <ul class="songinfo" ref="scrollUl" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
-      <!-- <transition-group name='songLi'> -->
-        <li ref="scrollLi" @click.stop="playMusic(item)" 
-        :class="{toleft:index%2==1,toright:index%2==0}" 
-        class="song "  
-        v-for="(item, index) in songlist" :key="index">
-            <div class="wrap" :class="{active:item.songmid==getPlayMusicSongmid}">
-              <div class="num-div">
-                {{zeroNum(index)}}
-            </div>
-            <div class="info-div">
-                <p>{{item.songname}}</p>
-                <span v-for="(name, index) in item.singer" :key="index">
-                    {{name.name}}
-                </span>
-            </div>
-            </div>
-            <div class="bg-img">
-              <img v-lazy="geturl(item.albummid) " alt="">
-            </div>
-        </li>
-        <!-- </transition-group> -->
-    </ul>
+  <ul class="songinfo" ref="scrollUl">
+    <!-- <transition-group name='songLi'> -->
+    <li ref="scrollLi" @click.stop="playMusic(item)" :class="{toleft:index%2==1,toright:index%2==0}" class="song " v-for="(item, index) in songlist" :key="index">
+      <div class="wrap" :class="{active:item.songmid==getPlayMusicSongmid}">
+        <div class="num-div">
+          {{zeroNum(index)}}
+        </div>
+        <div class="info-div">
+          <p>{{item.songname}}</p>
+          <span v-for="(name, index) in item.singer" :key="index">
+            {{name.name}}
+          </span>
+        </div>
+      </div>
+      <div class="bg-img">
+        <img v-lazy="geturl(item.albummid) " alt="">
+      </div>
+    </li>
+    <p class="more" @click="getMore" v-if="(songlist.length > 0) && showMore">点击加载更多</p>
+    <!-- </transition-group> -->
+  </ul>
+
 </template>
 
 <script type="text/ecmascript-6">
@@ -30,10 +29,10 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      isactive:false,
+      isactive: false
     };
   },
-  props:{
+  props: {
     songlist: {
       type: Array,
       default: []
@@ -41,37 +40,46 @@ export default {
     isShowPlayList: {
       type: Boolean,
       default: false
+    },
+    showMore:{
+      type:Boolean,
+      default:false
     }
   },
   methods: {
-    loadMore() {},
     geturl(id) {
       return getalbumimgurl(id);
     },
     zeroNum(index) {
-      index += 1
+      index += 1;
       if (index < 10) {
         return "0" + index;
       }
       return index;
     },
-    playMusic(item){
-      this.$store.dispatch('addMusic',item)
+    playMusic(item) {
+      this.$store.dispatch("addMusic", item);
     },
+    getMore(){
+      if (typeof this.showMore == 'boolean') {
+        this.$emit('getMoreMusic')
+      }
+    }
   },
   computed: {
     ...mapGetters({
-      getPlayMusicSongmid:'getPlayMusicSongmid',
-      getPlayIndex:'getPlayIndex',
-      getPlayMusic:'getPlayMusic',
-      getPlayMusicList:'getPlayMusicList',
+      getPlayMusicSongmid: "getPlayMusicSongmid",
+      getPlayIndex: "getPlayIndex",
+      getPlayMusic: "getPlayMusic",
+      getPlayMusicList: "getPlayMusicList"
     })
   },
   watch: {
-    isShowPlayList(newIsShow){
+    isShowPlayList(newIsShow) {
       if (newIsShow) {
-        let nextScroll = (this.getPlayIndex)*document.documentElement.clientHeight/10
-        this.$refs.scrollUl.scrollTop = nextScroll
+        let nextScroll =
+          this.getPlayIndex * document.documentElement.clientHeight / 10;
+        this.$refs.scrollUl.scrollTop = nextScroll;
       }
     }
   }
@@ -80,8 +88,7 @@ export default {
 
 <style scoped>
 .songinfo {
-  /* overflow-y: scroll; */
-  overflow: auto;
+  overflow: scroll;
   height: 100%;
   width: 100%;
 }
@@ -93,7 +100,7 @@ export default {
   display: flex;
   overflow: hidden;
 }
-.wrap{
+.wrap {
   /* flex: 1; */
   width: 80%;
   padding: 0 20px;
@@ -101,18 +108,18 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.bg-img{
+.bg-img {
   width: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.active{
+.active {
   background-color: rgba(52, 234, 247, 0.5) !important;
 }
 .num-div {
   align-self: center;
-  width:10%;
+  width: 10%;
 }
 .info-div {
   padding-left: 20px;
@@ -129,21 +136,26 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size:0.8rem;
+  font-size: 0.8rem;
   color: rgb(129, 128, 121);
 }
 
-.bg-img img{
+.bg-img img {
   width: 10vh;
   height: 10vh;
   border-radius: 10%;
-  box-shadow:1px 1px 10px #333333;
+  box-shadow: 1px 1px 10px #333333;
+}
+.more{
+  padding: 10px;
+  text-align: center;
 }
 
-.songLi-enter-active,.songLi-leave-active{
-  transition: all .3s ease;
+.songLi-enter-active,
+.songLi-leave-active {
+  transition: all 0.3s ease;
 }
-.songLi-enter{
+.songLi-enter {
   transform: translateY(-100%);
   opacity: 0;
 }
@@ -151,4 +163,5 @@ export default {
   transform: translateY(100%);
   opacity: 0;
 }
+
 </style>
