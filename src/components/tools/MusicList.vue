@@ -8,9 +8,6 @@
       </router-link>
     </mt-header>
     <div class="music-list-body">
-      <!-- <div class="music-img">
-        <img :src="backgroundImg" class="backgroundImg" alt="">
-      </div> -->
       <song-list :songlist='list'></song-list>
     </div>
   </div>
@@ -23,7 +20,6 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      backgroundImg: "",
       list:[],
       title:'',
     };
@@ -40,12 +36,6 @@ export default {
         console.log(e);
       });
   },
-  computed: {
-    ...mapGetters({
-      getPlayMusicList: "getPlayMusicList",
-      getPlayMusic: "getPlayMusic",
-    }),
-  },
   components: {
     SongList
   },
@@ -57,8 +47,6 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  /* bottom: 0;
-  right: 0; */
   width: 100%;
   height: 88%;
   z-index: 199;
@@ -88,15 +76,5 @@ export default {
   top: 10vh;
   height: 78vh;
 }
-.music-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 45vh;
-}
-.backgroundImg {
-  width: 100%;
-  height: 100%;
-}
+
 </style>

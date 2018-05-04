@@ -15,7 +15,7 @@
             </div>
             </div>
             <div class="bg-img">
-              <img :src="geturl(item.albummid) " alt="">
+              <img v-lazy="geturl(item.albummid) " alt="">
             </div>
         </li>
         </transition-group>
@@ -106,7 +106,7 @@ export default {
   align-items: center;
 }
 .active{
-  background-color: aqua !important;
+  background-color: rgba(52, 234, 247, 0.5) !important;
 }
 .num-div {
   align-self: center;

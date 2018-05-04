@@ -112,7 +112,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         })
       }),
       app.get('/musicapi/getSingerInfo',(req,res)=>{
-        let url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
+        let url = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg'
         axios.get(url,{
           params:req.query
         }).then(response=>{

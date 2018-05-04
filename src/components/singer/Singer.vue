@@ -1,26 +1,24 @@
 <template>
   <div class="wrap">
-    <div ref='heightdiv'>
+    <div ref='heightdiv' class="heightdiv">
       <div v-for="(data, index) in singerList" :key="index">
         <p class="title">{{getTitle(data.title)}}</p>
         <ul class="singer-ul">
-          <li class="singer-li" v-for="(item, index) in data.items" :key="index">
+          <li @click="getSingerId(item.id)" class="singer-li" v-for="(item, index) in data.items" :key="index">
             <div class="img-div">
-              <img class="singer-img" :src="item.img" alt="">
+              <img class="singer-img" v-lazy="item.img" alt="">
             </div>
             <p class="singer-name">{{item.name}}</p>
           </li>
         </ul>
       </div>
     </div>
-    <ul class="fast-list" ref="fastList" 
-    @touchstart="getStartFastHeight"
-    @touchmove="getMoveFastHeight"
-    >
+    <ul class="fast-list" ref="fastList" @touchstart="getStartFastHeight" @touchmove="getMoveFastHeight">
       <li @touchstart="getStartLi" class="fast-list-li" v-for="(item, index) in fastList" :key="index">
         <span>{{item}}</span>
       </li>
     </ul>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -78,32 +76,46 @@ export default {
       });
       return hotList.concat(sortList);
     },
-    getStartLi(e){
-      this.divHeight = this.$refs.heightdiv.clientHeight
-      this.fastHeight = this.$refs.fastList.clientHeight
-      this.fastTop = this.$refs.fastList.offsetTop - this.fastHeight/2
-      this.lastUl = document.querySelectorAll('.singer-ul')[document.querySelectorAll('.singer-ul').length-1]
-      this.percent = (e.touches[0].pageY - this.fastTop) / this.fastHeight
-      this.scrollheight = parseInt(this.percent*(this.divHeight-this.lastUl.clientHeight))
-      document.querySelector('.music-body').scrollTop = this.scrollheight
+    getStartLi(e) {
+      this.divHeight = this.$refs.heightdiv.clientHeight;
+      this.fastHeight = this.$refs.fastList.clientHeight;
+      this.fastTop = this.$refs.fastList.offsetTop - this.fastHeight / 2;
+      this.lastUl = document.querySelectorAll(".singer-ul")[
+        document.querySelectorAll(".singer-ul").length - 1
+      ];
+      this.percent = (e.touches[0].pageY - this.fastTop) / this.fastHeight;
+      this.scrollheight = parseInt(
+        this.percent * (this.divHeight - this.lastUl.clientHeight)
+      );
+      document.querySelector(".music-body").scrollTop = this.scrollheight;
     },
     getStartFastHeight(e) {
-      this.divHeight = this.$refs.heightdiv.clientHeight
-      this.fastHeight = this.$refs.fastList.clientHeight
-      this.fastTop = this.$refs.fastList.offsetTop - this.fastHeight/2
-      this.lastUl = document.querySelectorAll('.singer-ul')[document.querySelectorAll('.singer-ul').length-1]
+      this.divHeight = this.$refs.heightdiv.clientHeight;
+      this.fastHeight = this.$refs.fastList.clientHeight;
+      this.fastTop = this.$refs.fastList.offsetTop - this.fastHeight / 2;
+      this.lastUl = document.querySelectorAll(".singer-ul")[
+        document.querySelectorAll(".singer-ul").length - 1
+      ];
     },
     getMoveFastHeight(e) {
-      this.percent = (e.touches[0].pageY - this.fastTop) / this.fastHeight
-      this.scrollheight = parseInt(this.percent*(this.divHeight-this.lastUl.clientHeight))
-      document.querySelector('.music-body').scrollTop = this.scrollheight
+      this.percent = (e.touches[0].pageY - this.fastTop) / this.fastHeight;
+      this.scrollheight = parseInt(
+        this.percent * (this.divHeight - this.lastUl.clientHeight)
+      );
+      document.querySelector(".music-body").scrollTop = this.scrollheight;
     },
-    getTitle(title){
-      if (title == 'hot') {
-        return '热门'
-      }else{
-        return title
+    getTitle(title) {
+      if (title == "hot") {
+        return "热门";
+      } else {
+        return title;
       }
+    },
+    getSingerId(id){
+      // console.log(id);
+      this.$router.push({
+        path:`/singer/${id}`
+      })
     }
   },
   created() {
@@ -126,10 +138,10 @@ export default {
 </script>
 
 <style scoped>
-.wrap{
+.wrap {
   height: 100%;
 }
-.title{
+.title {
   line-height: 2;
   text-indent: 2em;
   /* padding: 5px 0; */
@@ -150,14 +162,14 @@ export default {
   flex: 1;
   /* text-align: center; */
 }
-.img-div{
+.img-div {
   padding: 2vh;
 }
 .singer-img {
   width: 16vh;
   height: 16vh;
   border-radius: 10%;
-  box-shadow:1px 1px 10px #333333;
+  box-shadow: 1px 1px 10px #333333;
 }
 .fast-list {
   position: fixed;
@@ -167,7 +179,7 @@ export default {
   width: 5%;
   transform: translateY(-50%);
 }
-.fast-list-li{
+.fast-list-li {
   font-size: 13px;
   text-align: center;
 }

@@ -174,7 +174,8 @@ export default {
   width: 100%;
   height: 40vh;
   z-index: 66;
-  background-color: rgb(215, 255, 248);
+  background-color: rgba(5, 5, 5, 0.603);
+  /* background-color: rgb(215, 255, 248); */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -208,7 +209,15 @@ export default {
   left: 0;
   width: 100%;
   height: 15vh;
-  background: rgb(255, 255, 255);
+  /* background: rgb(255, 255, 255); */
+  background: -webkit-gradient(
+    linear,
+    0% 0%,
+    0% 100%,
+    from(rgba(184, 184, 184, 1)),
+    to(#fdfdfd),
+    color-stop(0.9, #ffffff)
+  );
 }
 .control-music {
   display: flex;

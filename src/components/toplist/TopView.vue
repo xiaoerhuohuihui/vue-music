@@ -48,6 +48,8 @@ export default {
 .topListImg img {
   width: 100%;
   height: 100%;
+  border-radius: 10%;
+  box-shadow:1px 1px 10px #333333;
 }
 .topList-songList {
   display: flex;

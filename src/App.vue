@@ -10,6 +10,7 @@
 import MusicBody from 'com/layout/MusicBody'
 import MusicHeader from 'com/layout/MusicHeader'
 import Player from 'com/player/Player'
+
 export default {
   name: "App",
   components: {
@@ -46,5 +47,10 @@ body{
 .view-leave-to {
   transform: translateX(-100%);
   opacity: 0;
+}
+image[lazy=loading] {
+  width: 40px;
+  height: 300px;
+  margin: auto;
 }
 </style>

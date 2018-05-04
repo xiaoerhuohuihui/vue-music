@@ -20,6 +20,7 @@ Vue.prototype.$axios = axios
 Vue.prototype.$jsonp = jsonp
 Vue.prototype.$swiper = swiper
 
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

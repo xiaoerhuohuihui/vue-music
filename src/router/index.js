@@ -4,6 +4,7 @@ import Recommend from 'com/recommend/Recommend'
 import TopList from 'com/toplist/TopList'
 import MusicList from 'com/tools/MusicList'
 import Singer from 'com/singer/Singer'
+import SingerInfo from 'com/singer/SingerInfo'
 import Search from 'com/search/Search'
 
 
@@ -35,7 +36,12 @@ export default new Router({
     {
       path: '/singer',
       name: 'Singer',
-      component: Singer
+      component: Singer,
+      children:[{
+        path:'/singer/:id',
+        name:'SingerInfo',
+        component:SingerInfo
+      }]
     },
     {
       path: '/search',
@@ -43,5 +49,13 @@ export default new Router({
       component: Search
     },
     
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      console.log(savedPosition)
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  },
 })

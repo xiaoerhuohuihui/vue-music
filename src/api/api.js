@@ -143,10 +143,10 @@ export const searchMusic = (keywords, p) => {
     console.log(err);
   })
 }
-export const getSingerInfo = (keywords, p) => {
+export const getSingerInfo = (singerid) => {
   const url = `/musicapi/getSingerInfo`
   const params = {
-    singerid: 5062,  //歌手ID
+    singerid: singerid,  //歌手ID
     g_tk: 5381,
     uin: 0,
     format: 'json',
@@ -157,14 +157,14 @@ export const getSingerInfo = (keywords, p) => {
     needNewCode: 1,
     order: 'listen',
     from: 'h5',
-    num: 15,  // 歌曲个数
+    num: 50,  // 歌曲个数
     begin: 0,
     _: Date.now(),
   }
   return axios.get(url, {
     params
   }).then(res => {
-    return Promise.resolve(res)
+    return Promise.resolve(res.data)
   }).catch(err => {
     console.log(err);
   })

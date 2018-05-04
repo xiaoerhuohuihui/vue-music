@@ -77,7 +77,7 @@ export default {
 <style scoped>
 .progress {
   height: 3vh;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(204, 204, 204);
   position: relative;
 }
 .start {
