@@ -89,9 +89,7 @@ export default {
     },
     handleLyric(num, txt){
       this.lyricNum = num.lineNum
-      // console.log(this.lyricNum);
-      
-    }
+    },
   },
   computed: {
     ...mapGetters({
@@ -101,7 +99,6 @@ export default {
       getMusicPicUrl: "getMusicPicUrl",
       getMusicName: "getMusicName",
       getMusicSinger: "getMusicSinger",
-      getCurrentTime: "getCurrentTime",
       getIspause: "getIspause",
       getLoop: "getLoop",
       getPlayIndex: "getPlayIndex"
@@ -141,7 +138,9 @@ export default {
       }
       console.log(this.$refs.audio.loop);
     },
-    
+    currentTime(newTime){
+      this.lyric.seek(newTime*1000)
+    }
   }
 };
 </script>

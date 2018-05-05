@@ -95,13 +95,18 @@ const mutations = {
     }).length
     if (len == 0) {
       state.playMusicList.push(payload)
+      localStorage.removeItem('list')
+      localStorage.setItem('list',JSON.stringify(state.playMusicList))
     }
   },
+  
   changePlayMusic(state, payload) {
     state.playMusic = payload
     state.musicPicUrl = getalbumimgurl(payload.albummid)
     state.musicName = payload.songname
     state.musicSinger = payload.singer
+    localStorage.removeItem('playMusic')
+    localStorage.setItem('playMusic',JSON.stringify(state.playMusic))
   },
   setAudio(state, payload) {
     state.audio = payload

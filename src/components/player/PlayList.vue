@@ -8,12 +8,12 @@
     <div v-show="!showLyric" @click.stop="toggoleLyric" class="bg-album">
       <img class="bg-album-img" :src="getMusicPicUrl" alt="">
     </div>
-    <div v-show="showLyric" class="lyric">
+    <div v-show="showLyric" class="lyric"  @click.stop="toggoleLyric" >
       <div class="lryic-wrap">
         <p class="lyric-line" :class="{'play-lyric': lyricNum === index}" 
-      @click.stop="toggoleLyric" 
       v-for="(lry, index) in localLyric" :key="index">{{lry.txt}}</p>
       </div>
+      <p class="no-lyric" v-if="!localLyric.length">没有歌词</p>
     </div>
     <div class="song-list" ref="songListDiv" @click.stop="chang">
       <song-list :isShowPlayList='isShowPlayList' :songlist='getPlayMusicList'></song-list>
@@ -132,7 +132,7 @@ export default {
       this.progress = this.currentTime / this.getAudio.duration * 100;
     },
     getPercent(percent) {
-      this.getAudio.currentTime = this.getAudio.duration * percent;
+      this.getAudio.currentTime = this.getAudio.duration * percent
     },
     isplay() {
       let a = this.getAudio;
@@ -217,7 +217,7 @@ export default {
 }
 .goback-i{
   display: inline-block;
-  transform:scale(1.5,2.5)
+  transform:scale(1.5,1.5)
 }
 .bg-album{
   position: absolute;
@@ -226,9 +226,7 @@ export default {
   width: 100%;
   height: 40vh;
   z-index: 66;
-  /* background-color: rgba(5, 5, 5, 0.603); */
-  background-color: rgb(133, 244, 248);
-  /* background-color: rgb(215, 255, 248); */
+  background-color: rgb(155, 244, 247);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -240,20 +238,22 @@ export default {
   width: 100%;
   height: 40vh;
   z-index: 66;
-  background-color: rgb(133, 244, 248);
+  background-color: rgb(155, 244, 247);
   text-align: center;
   overflow: scroll;
 }
 .lryic-wrap{
-  /* background-color: rgb(108, 247, 212); */
-  /* width: 70%; */
+  width: 70%;
   margin: 0 auto;
   text-align: center;
   line-height: 2;
-  height: 4vh;
+  /* height: 40vh; */
+}
+.no-lyric{
+  transform: translateY(550%)
 }
 .play-lyric{
-  color: rgb(23, 67, 214);
+  color: rgb(26, 188, 238);
 }
 .bg-album-img{
   width: 40vh;

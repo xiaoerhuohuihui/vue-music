@@ -94,7 +94,7 @@ export default {
 
 <style scoped>
 .songinfo {
-  overflow: scroll;
+  overflow: auto;
   height: 100%;
   width: 100%;
 }

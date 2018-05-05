@@ -17,6 +17,15 @@ export default {
     MusicBody,
     MusicHeader,
     Player,
+  },
+  created () {
+    if (localStorage.getItem('list') && localStorage.getItem('playMusic')) {
+      let list = JSON.parse(localStorage.getItem('list'))
+      list.map(item=>{
+        this.$store.commit('changePlayMusicList',item)
+      })
+      this.$store.commit('changePlayMusic',JSON.parse(localStorage.getItem('playMusic')))
+    }
   }
 };
 </script>

@@ -75,6 +75,6 @@ export default {
   position: absolute;
   top: 10vh;
   height: 78vh;
-  overflow: scroll;
+  overflow: auto;
 }
 </style>

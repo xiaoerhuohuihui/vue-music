@@ -33,7 +33,7 @@ export const getSinger = () => {
     channel: 'singer',
     page: 'list',
     key: 'all_all_all',
-    pagesize: 400, //每页个数
+    pagesize: 100, //每页个数
     pagenum: 1, //页数
     g_tk: 5381,
     jsonpCallback: 'GetSingerListCallback',

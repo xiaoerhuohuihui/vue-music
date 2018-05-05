@@ -14,7 +14,7 @@
       </div>
     </div>
     <ul class="fast-list" ref="fastList" @touchstart="getStartFastHeight" @touchmove="getMoveFastHeight">
-      <li @touchstart="getStartLi(index, $event)" class="fast-list-li" v-for="(item, index) in fastList" :key="index">
+      <li :class="{active:nowIndex === index}" @touchstart="getStartLi(index, $event)" class="fast-list-li" v-for="(item, index) in fastList" :key="index">
         <span>{{item}}</span>
       </li>
     </ul>
@@ -31,7 +31,8 @@ export default {
       singerList: [],
       hotList: [],
       sortList: [],
-      fastList: []
+      fastList: [],
+      nowIndex:0
     };
   },
   methods: {
@@ -85,6 +86,7 @@ export default {
           i - 1
         ].scrollHeight;
       }
+      this.nowIndex = index
       document.querySelector(".music-body").scrollTop = this.height;
     },
     getStartFastHeight(e) {
@@ -108,7 +110,9 @@ export default {
     getTitle(title) {
       if (title == "hot") {
         return "热门";
-      } else {
+      } else if (title.match(/^a-zA-Z/)) {
+        return '#'
+      }else {
         return title;
       }
     },
@@ -129,11 +133,11 @@ export default {
           } else {
             this.fastList.push(item.title);
           }
-        });
+        })
       })
       .catch(e => {
         console.log(e);
-      });
+      })
   }
 };
 </script>
@@ -179,5 +183,8 @@ export default {
 .fast-list-li {
   font-size: 13px;
   text-align: center;
+}
+.active{
+  color: rgba(52, 234, 247, 0.5)
 }
 </style>

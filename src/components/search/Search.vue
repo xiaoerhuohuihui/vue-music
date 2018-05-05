@@ -29,28 +29,23 @@ export default {
   },
   methods: {
     search() {
+      this.isShowMore = true
       searchMusic(this.value, this.p)
         .then(res => {
           this.result = res.data.data.song.list;
           this.allSongNo = res.data.data.song.totalnum
-          // console.log(this.result);
         })
         .catch(err => {
           console.log(err);
         });
     },
     getMoreMusic() {
-      
-      
       if (this.result.length <= this.allSongNo) {
         this.p += 1;
         searchMusic(this.value, this.p)
           .then(res => {
-            // this.result += res.data.data.song.list;
             this.result = this.result.concat(res.data.data.song.list)
-            
             this.allSongNo = res.data.data.song.totalnum
-            console.log(this.allSongNo);
           })
           .catch(err => {
             console.log(err);
