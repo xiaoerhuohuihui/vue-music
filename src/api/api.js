@@ -109,8 +109,35 @@ export const getRecomDisst = (disstid) => {
     console.log(err);
   })
 }
+//获取歌词
+export const getLyric = (musicid='213470055') => {
+  const url = `/musicapi/getLyric`
+  const params = {
+    g_tk: 5381,
+    uin: 0,
+    format: 'json',
+    inCharset: 'utf-8',
+    outCharset: 'utf-8',
+    notice: 0,
+    platform: 'h5',
+    needNewCode: 1,
+    nobase64: 1,
+    musicid: musicid,
+    songtype: 0,
+    _: Date.now(),
+    jsonpCallback: 'jsonp1',
+  }
+  return axios.get(url, {
+    params
+  }).then(res => {
+    let ret = JSON.parse(res.data.replace(/^jsonp1\(/, '').replace(/\)$/, ''))
+    return Promise.resolve(ret)
+  }).catch(err => {
+    console.log(err);
+  })
+}
 //搜索音乐
-export const searchMusic = (keywords, p=1) => {
+export const searchMusic = (keywords, p = 1) => {
   const url = `/musicapi/searchMusic`
   const params = {
     g_tk: 5381,
@@ -143,10 +170,10 @@ export const searchMusic = (keywords, p=1) => {
     console.log(err);
   })
 }
-export const getSingerInfo = (singerid,n=15) => {
+export const getSingerInfo = (singerid, n = 15) => {
   const url = `/musicapi/getSingerInfo`
   const params = {
-    singerid: singerid,  //歌手ID
+    singerid: singerid, //歌手ID
     g_tk: 5381,
     uin: 0,
     format: 'json',
@@ -157,7 +184,7 @@ export const getSingerInfo = (singerid,n=15) => {
     needNewCode: 1,
     order: 'listen',
     from: 'h5',
-    num: n,  // 歌曲个数
+    num: n, // 歌曲个数
     begin: 0, //页数
     _: Date.now(),
   }

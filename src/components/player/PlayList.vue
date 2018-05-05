@@ -2,9 +2,18 @@
   <div class="play-list">
     <div class="wrap">
     </div>
-    <div class="bg-album">
+    <div class="goback" @click="goback">
+      <span class="goback-i">&lt;</span>
+    </div>
+    <div v-show="!showLyric" @click.stop="toggoleLyric" class="bg-album">
       <img class="bg-album-img" :src="getMusicPicUrl" alt="">
-      <!-- <img class="bg-album-img" src="https://y.gtimg.cn/music/photo_new/T002R300x300M000001nKRSt1ygmNs.jpg?max_age=2592000" alt=""> -->
+    </div>
+    <div v-show="showLyric" class="lyric">
+      <div class="lryic-wrap">
+        <p class="lyric-line" :class="{'play-lyric': lyricNum === index}" 
+      @click.stop="toggoleLyric" 
+      v-for="(lry, index) in localLyric" :key="index">{{lry.txt}}</p>
+      </div>
     </div>
     <div class="song-list" ref="songListDiv" @click.stop="chang">
       <song-list :isShowPlayList='isShowPlayList' :songlist='getPlayMusicList'></song-list>
@@ -44,6 +53,7 @@ export default {
     return {
       progress: 0,
       loopList: ["danqu", "liebiao", "suiji"],
+      showLyric:false
     };
   },
   props: {
@@ -54,11 +64,22 @@ export default {
     isShowPlayList:{
       type:Boolean,
       default:false
+    },
+    localLyric:{
+      type:Array,
+      default:[]
+    },
+    lyricNum:{
+      type:Number,
+      default:0
     }
   },
   methods: {
     change() {},
     chang() {},
+    goback(){
+      this.$emit('goback')
+    },
     prev() {
       if (this.getLoop == "liebiao" || this.getLoop == "danqu") {
         let nextIndex = 0;
@@ -67,6 +88,7 @@ export default {
         } else {
           nextIndex = (this.getPlayIndex - 1) % this.getPlayMusicList.length;
         }
+        
         this.$store.commit("changePlayMusic", this.getPlayMusicList[nextIndex]);
       } else if (this.getLoop == "suiji") {
         let nextIndex = parseInt(
@@ -103,6 +125,9 @@ export default {
       }
       return min + ":" + sec;
     },
+    toggoleLyric(){
+      this.showLyric = !this.showLyric
+    },
     getProgress() {
       this.progress = this.currentTime / this.getAudio.duration * 100;
     },
@@ -118,6 +143,15 @@ export default {
         a.pause();
         this.$store.commit("changeIspause", true);
       }
+    },
+    scrollLyric(index){
+      this.height = 0;
+      for (let i = 4; i <= index; i++) {
+        this.height += document.querySelectorAll(".lyric-line")[
+          i - 1
+        ].scrollHeight;
+      }
+      document.querySelector('.lyric').scrollTop = this.height
     }
   },
   computed: {
@@ -129,6 +163,7 @@ export default {
       getnum: "getnum",
       getLoop: "getLoop",
       getMusicPicUrl: "getMusicPicUrl",
+      getPlayIndex: "getPlayIndex",
     }),
     getDuration() {
       if (!isNaN(this.getMusicDuration)) {
@@ -147,6 +182,9 @@ export default {
     currentTime() {
       this.progress = this.currentTime / this.getAudio.duration * 100;
     },
+    lyricNum(newNum){
+      this.scrollLyric(newNum)
+    }
   }
 };
 </script>
@@ -167,6 +205,20 @@ export default {
   bottom: 0;
   right: 0;
 }
+.goback{
+  position: absolute;
+  top: 0;
+  width: 15%;
+  margin: 0 auto;
+  line-height: 10vh;
+  height: 10vh;
+  text-align: center;
+  z-index: 999;
+}
+.goback-i{
+  display: inline-block;
+  transform:scale(1.5,2.5)
+}
 .bg-album{
   position: absolute;
   top: 0;
@@ -174,11 +226,34 @@ export default {
   width: 100%;
   height: 40vh;
   z-index: 66;
-  background-color: rgba(5, 5, 5, 0.603);
+  /* background-color: rgba(5, 5, 5, 0.603); */
+  background-color: rgb(133, 244, 248);
   /* background-color: rgb(215, 255, 248); */
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.lyric{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40vh;
+  z-index: 66;
+  background-color: rgb(133, 244, 248);
+  text-align: center;
+  overflow: scroll;
+}
+.lryic-wrap{
+  /* background-color: rgb(108, 247, 212); */
+  /* width: 70%; */
+  margin: 0 auto;
+  text-align: center;
+  line-height: 2;
+  height: 4vh;
+}
+.play-lyric{
+  color: rgb(23, 67, 214);
 }
 .bg-album-img{
   width: 40vh;
@@ -196,7 +271,7 @@ export default {
 }
 .song-list {
   position: absolute;
-  bottom: 15vh;
+  top: 40vh;
   left: 0;
   width: 100%;
   height: 45vh;

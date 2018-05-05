@@ -13,7 +13,7 @@
         </div>
         <audio @canplay="setAudioToStore" @timeupdate="setProgress" loop ref="audio" :src="getMusicUrl" @ended="playnext" autoplay></audio>
         <transition name='playlist'>
-            <play-list v-show="isShowPlayList" :isShowPlayList='isShowPlayList' :currentTime='currentTime' @click.native="goToPlayer"></play-list>
+            <play-list :lyricNum='lyricNum' @goback='goback' :localLyric='localLyric' v-show="isShowPlayList" :isShowPlayList='isShowPlayList' :currentTime='currentTime'></play-list>
         </transition>
     </div>
 </template>
@@ -21,12 +21,15 @@
 <script type="text/ecmascript-6">
 import { mapGetters, mapActions } from "vuex";
 import PlayList from "./PlayList";
-import { getSongUrl } from "@/api/api";
+import { getSongUrl,getLyric } from "@/api/api";
+import Lyric from 'lyric-parser'
 export default {
   data() {
     return {
       isShowPlayList: false,
-      currentTime: 0
+      currentTime: 0,
+      localLyric:[],
+      lyricNum:0
     };
   },
   methods: {
@@ -56,7 +59,7 @@ export default {
     showPlayList() {
       this.isShowPlayList = true;
     },
-    goToPlayer() {
+    goback() {
       this.isShowPlayList = false;
     },
     setAudioToStore() {
@@ -79,6 +82,16 @@ export default {
     getName(name){
       return this.$entities.decode(name)
     },
+    getLyricHtml(str){
+      var li = document.createElement('li')
+       li.innerHTML = str
+       return li.textContent || li.innerText
+    },
+    handleLyric(num, txt){
+      this.lyricNum = num.lineNum
+      // console.log(this.lyricNum);
+      
+    }
   },
   computed: {
     ...mapGetters({
@@ -105,7 +118,20 @@ export default {
       this.$store.commit("changeIspause", false);
       this.songmid = newMusic.songmid;
       this.$store.dispatch("changeMusicUrl", this.songmid);
+      if (this.lyric) {
+        this.lyric.stop()
+      }
+      getLyric(newMusic.songid).then(res=>{
+        this.lyric = new Lyric(this.getLyricHtml(res.lyric), this.handleLyric)
+        this.localLyric = this.lyric.lines
+        this.lyric.play()
+      }).catch(e=>{
+        console.log(e);
+      })
       this.getIndex(newMusic);
+    },
+    getIspause(newPlay){
+      this.lyric.togglePlay()
     },
     getLoop(newLoop) {
       if (newLoop == "danqu") {

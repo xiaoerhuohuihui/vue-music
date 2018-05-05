@@ -130,6 +130,18 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         }).catch(e=>{
           console.log(e)
         })
+      }),
+      app.get('/musicapi/getLyric',(req,res)=>{
+        let url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric.fcg'
+        axios.get(url,{
+          params:req.query,
+          headers: 
+          { referer: 'https://y.qq.com/' } 
+        }).then(response=>{
+          res.json(response.data)
+        }).catch(e=>{
+          console.log(e)
+        })
       })
     }
   },
