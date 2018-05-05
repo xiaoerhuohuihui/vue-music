@@ -27,12 +27,8 @@ export default {
   },
   methods: {
     getDiss(id){
-        getRecomDisst(id).then(res=>{
-            this.dissList = res.cdlist[0].songlist
-            
-            this.$store.dispatch('addMusic', this.dissList)
-        }).catch(e=>{
-            console.log(e);
+        this.$router.push({
+            path: `/recommend/${id}`,
         })
     },
       

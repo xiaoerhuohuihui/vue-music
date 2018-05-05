@@ -1,64 +1,70 @@
 <template>
-  <div class="search" ref="search" >
-    <div class="search-input">
-      <mt-search class="search-input" placeholder="请输入内容" type='search' v-model="value" @keyup.enter.native="search">
-      </mt-search>
-    </div>
-    <ul class="search-list" >
-      <li @scroll="scroll" class="song" v-for="(item, index) in result" :key="index">
-            <div class="info-div">
-                <p>{{item.songname}}</p>
-                <span v-for="(name, index) in item.singer" :key="index">
-                    {{name.name}}
-                </span>
-            </div>
-      </li>
-    </ul>
-    <p class="next" v-if="result.length > 0" @click="loadMore">
-      下一页
-    </p>
+  <div class="search" ref="search">
+    <input type="search" class="search-input" v-model="value" placeholder="搜索歌曲、歌手" @keyup.enter="search">
+    <song-list :songlist='result' @getMoreMusic='getMoreMusic' :showMore='isShowMore'></song-list>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import { searchMusic } from "@/api/api";
+import SongList from "com/tools/SongList";
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
 export default {
   data() {
     return {
       value: "",
       result: [],
       p: 1,
-      songlist: []
+      songlist: [],
+      isShowMore: true,
+      allSongNo:0
     };
   },
+  components: {
+    SongList
+  },
   mounted() {
-      window.addEventListener('scroll', this.scroll);
-    },
+    window.addEventListener("scroll", this.scroll);
+  },
   methods: {
     search() {
       searchMusic(this.value, this.p)
         .then(res => {
           this.result = res.data.data.song.list;
+          this.allSongNo = res.data.data.song.totalnum
           // console.log(this.result);
         })
         .catch(err => {
           console.log(err);
         });
     },
-    loadMore() {
-      this.p++;
-      searchMusic(this.value, this.p)
-        .then(res => {
-          this.result = res.data.data.song.list;
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    scroll(){
-      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-  console.log(scrollTop)
+    getMoreMusic() {
       
+      
+      if (this.result.length <= this.allSongNo) {
+        this.p += 1;
+        searchMusic(this.value, this.p)
+          .then(res => {
+            // this.result += res.data.data.song.list;
+            this.result = this.result.concat(res.data.data.song.list)
+            
+            this.allSongNo = res.data.data.song.totalnum
+            console.log(this.allSongNo);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        return;
+      }
+      this.isShowMore = false;
+    },
+    scroll() {
+      var scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+      console.log(scrollTop);
     }
   }
 };
@@ -69,13 +75,15 @@ export default {
   width: 100%;
 }
 .search-input {
-  height: 10vh;
+  height: 30px;
+  width: 100%;
   padding: 5px;
+  outline: none;
 }
-.search-list{
+.search-list {
   margin-bottom: 50px;
 }
-.mint-search-list{
+.mint-search-list {
   padding: 0;
   margin-top: 44px;
 }
@@ -91,11 +99,10 @@ export default {
   padding-left: 20px;
 }
 .info-div p {
-    font-size: 20px;
+  font-size: 20px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  
 }
 .info-div span {
   overflow: hidden;
@@ -104,7 +111,6 @@ export default {
   font-size: 16px;
   color: rgb(129, 128, 121);
 }
-
 
 .next {
   text-align: center;

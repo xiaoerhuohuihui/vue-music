@@ -2,6 +2,7 @@
     <div class="recom">
       <Slider :sliderList='sliderList'></Slider>
       <recommend-list :recomList='recomList'></recommend-list>
+      <router-view></router-view>
     </div>
 </template>
 

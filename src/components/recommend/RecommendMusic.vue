@@ -1,7 +1,7 @@
 <template>
   <div class="music-list">
     <mt-header class="music-list-header" :title="title">
-      <router-link to="/toplist" slot="left" class="back">
+      <router-link to="/recommend" slot="left" class="back">
         <mt-button icon="back">
           <span>返回</span>
         </mt-button>
@@ -14,23 +14,20 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { getalbumimgurl, getTopMusicList } from "@/api/api";
+import { getalbumimgurl, getRecomDisst } from "@/api/api";
 import SongList from "../tools/SongList";
-import { mapGetters } from "vuex";
 export default {
   data() {
     return {
       list: [],
       title: ""
-    };
+    }
   },
   created() {
-    getTopMusicList(this.$route.params.id)
+    getRecomDisst(this.$route.params.id)
       .then(res => {
-        res.data.songlist.map(item => {
-          this.list.push(item.data);
-        });
-        this.title = res.data.topinfo.ListName;
+          console.log(res);
+          this.list = res.cdlist[0].songlist
       })
       .catch(e => {
         console.log(e);

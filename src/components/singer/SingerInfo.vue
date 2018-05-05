@@ -11,7 +11,6 @@
       <div class="singer-img">
         <img :src="singerImg" alt="">
         <p class="singer-info-p" @click="getAllInfo">{{singerinfo}}</p>
-        <!-- 点击显示详细信息 -->
       </div>
       <div class="all-info-wrap" @click.self="closeToast" v-if="showInfo"></div>
       <song-list class="songlist" @getMoreMusic='getMoreMusic' :showMore='isShowMore' :songlist='list'></song-list>

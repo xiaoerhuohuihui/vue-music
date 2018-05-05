@@ -4,8 +4,8 @@
             <img :src="getMusicPicUrl" alt="">
         </div>
         <div class="song-info">
-            <p>{{getMusicName}}</p>
-            <span v-for="(item, index) in getMusicSinger" :key="index">{{item.name}}</span>
+            <p>{{getName(getMusicName)}}</p>
+            <span v-for="(item, index) in getMusicSinger" :key="index">{{getName(item.name)}}</span>
         </div>
         <div class="icon" @click="isplay">
             <img v-if="getIspause" src="@/assets/pause.png" alt="">
@@ -75,7 +75,10 @@ export default {
     setProgress() {
       this.$store.commit("changeMusicDuration", this.$refs.audio.duration);
       this.currentTime = this.$refs.audio.currentTime;
-    }
+    },
+    getName(name){
+      return this.$entities.decode(name)
+    },
   },
   computed: {
     ...mapGetters({
@@ -111,7 +114,8 @@ export default {
         this.$refs.audio.loop = false;
       }
       console.log(this.$refs.audio.loop);
-    }
+    },
+    
   }
 };
 </script>

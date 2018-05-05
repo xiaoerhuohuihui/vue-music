@@ -110,7 +110,7 @@ export const getRecomDisst = (disstid) => {
   })
 }
 //搜索音乐
-export const searchMusic = (keywords, p) => {
+export const searchMusic = (keywords, p=1) => {
   const url = `/musicapi/searchMusic`
   const params = {
     g_tk: 5381,

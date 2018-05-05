@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Recommend from 'com/recommend/Recommend'
+import RecommendMusic from 'com/recommend/RecommendMusic'
 import TopList from 'com/toplist/TopList'
 import MusicList from 'com/tools/MusicList'
 import Singer from 'com/singer/Singer'
@@ -21,7 +22,12 @@ export default new Router({
     {
       path: '/recommend',
       name: 'Recommend',
-      component: Recommend
+      component: Recommend,
+      children: [{
+        path: '/recommend/:id',
+        name: 'RecommendMusic',
+        component: RecommendMusic
+      },]
     },
     {
       path: '/toplist',

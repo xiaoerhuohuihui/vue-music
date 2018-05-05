@@ -7,9 +7,9 @@
           {{zeroNum(index)}}
         </div>
         <div class="info-div">
-          <p>{{item.songname}}</p>
+          <p>{{getName(item.songname)}}</p>
           <span v-for="(name, index) in item.singer" :key="index">
-            {{name.name}}
+            {{getName(name.name)}}
           </span>
         </div>
       </div>
@@ -26,10 +26,12 @@
 <script type="text/ecmascript-6">
 import { getalbumimgurl } from "@/api/api";
 import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
-      isactive: false
+      isactive: false,
+      
     };
   },
   props: {
@@ -64,9 +66,13 @@ export default {
       if (typeof this.showMore == 'boolean') {
         this.$emit('getMoreMusic')
       }
-    }
+    },
+    getName(name){
+      return this.$entities.decode(name)
+    },
   },
   computed: {
+    
     ...mapGetters({
       getPlayMusicSongmid: "getPlayMusicSongmid",
       getPlayIndex: "getPlayIndex",
