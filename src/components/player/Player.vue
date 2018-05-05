@@ -11,7 +11,7 @@
             <img v-if="getIspause" src="@/assets/pause.png" alt="">
             <img v-else src="@/assets/play.png" alt="">
         </div>
-        <audio @canplay="setAudioToStore" @timeupdate="setProgress" loop ref="audio" :src="getMusicUrl" @ended="playnext" autoplay></audio>
+        <audio @timeupdate="setProgress" loop ref="audio" :src="getMusicUrl" @ended="playnext"></audio>
         <transition name='playlist'>
             <play-list :lyricNum='lyricNum' @goback='goback' :localLyric='localLyric' v-show="isShowPlayList" :isShowPlayList='isShowPlayList' :currentTime='currentTime'></play-list>
         </transition>
@@ -63,7 +63,6 @@ export default {
       this.isShowPlayList = false;
     },
     setAudioToStore() {
-      //   console.log(this.$refs.audio.duration);
       this.$store.commit("setAudio", this.$refs.audio);
     },
     getIndex(newMusic) {
@@ -110,15 +109,26 @@ export default {
   components: {
     PlayList
   },
+  mounted () {
+    if (localStorage.getItem('list') && localStorage.getItem('playMusic')) {
+      let list = JSON.parse(localStorage.getItem('list'))
+      list.map(item=>{
+        this.$store.commit('changePlayMusicList',item)
+      })
+      let playMusic = JSON.parse(localStorage.getItem('playMusic'))
+      this.$store.commit('changePlayMusic',playMusic)
+    }
+    this.setAudioToStore()
+  },
   watch: {
     getPlayMusic(newMusic) {
-      this.$store.commit("changeIspause", false);
+      // this.$store.commit("changeIspause", false);
       this.songmid = newMusic.songmid;
       this.$store.dispatch("changeMusicUrl", this.songmid);
-      if (this.lyric) {
+      getLyric(newMusic.songid).then(res=>{
+        if (this.lyric) {
         this.lyric.stop()
       }
-      getLyric(newMusic.songid).then(res=>{
         this.lyric = new Lyric(this.getLyricHtml(res.lyric), this.handleLyric)
         this.localLyric = this.lyric.lines
         this.lyric.play()
@@ -128,7 +138,10 @@ export default {
       this.getIndex(newMusic);
     },
     getIspause(newPlay){
-      this.lyric.togglePlay()
+      if (this.lyric) {
+        this.lyric.togglePlay()
+      }
+      
     },
     getLoop(newLoop) {
       if (newLoop == "danqu") {

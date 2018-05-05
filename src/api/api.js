@@ -2,9 +2,11 @@ import axios from 'axios'
 import {
   jsonp
 } from "../api/jsonp";
+const BaseUrl = ``
+// const BaseUrl = `http://4d3kmh.natappfree.cc`
 //获取推荐
 export const getRecommend = () => {
-  const url = `/musicapi/getRecommend`
+  const url = BaseUrl+`/musicapi/getRecommend`
   const params = {
     g_tk: 5381,
     uin: 0,
@@ -81,7 +83,7 @@ export const getRecomList = () => {
 }
 //获取推荐歌单列表内容
 export const getRecomDisst = (disstid) => {
-  const url = `/musicapi/getDiss`
+  const url = BaseUrl+`/musicapi/getDiss`
   const params = {
     type: 1,
     json: 1,
@@ -111,7 +113,7 @@ export const getRecomDisst = (disstid) => {
 }
 //获取歌词
 export const getLyric = (musicid='213470055') => {
-  const url = `/musicapi/getLyric`
+  const url = BaseUrl+`/musicapi/getLyric`
   const params = {
     g_tk: 5381,
     uin: 0,
@@ -138,7 +140,7 @@ export const getLyric = (musicid='213470055') => {
 }
 //搜索音乐
 export const searchMusic = (keywords, p = 1) => {
-  const url = `/musicapi/searchMusic`
+  const url = BaseUrl+`/musicapi/searchMusic`
   const params = {
     g_tk: 5381,
     uin: 0,
@@ -171,7 +173,7 @@ export const searchMusic = (keywords, p = 1) => {
   })
 }
 export const getSingerInfo = (singerid, n = 15) => {
-  const url = `/musicapi/getSingerInfo`
+  const url = BaseUrl+`/musicapi/getSingerInfo`
   const params = {
     singerid: singerid, //歌手ID
     g_tk: 5381,
@@ -198,7 +200,7 @@ export const getSingerInfo = (singerid, n = 15) => {
 }
 //获取排行列表内的歌曲
 export const getTopMusicList = (topid) => {
-  const url = `/musicapi/getMusicList`
+  const url = BaseUrl+`/musicapi/getMusicList`
   const params = {
     g_tk: 5381,
     uin: 0,
@@ -226,7 +228,7 @@ export const getTopMusicList = (topid) => {
 //获取排行列表
 export const getTopList = () => {
   // const url =  ` https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg?`
-  const url = `/musicapi/getTopList`
+  const url = BaseUrl+`/musicapi/getTopList`
   const params = {
     g_tk: 5381,
     uin: 0,
@@ -251,7 +253,7 @@ export const getTopList = () => {
 
 //获取专辑
 export const getalbum = (albummid) => {
-  const url = `/musicapi/getalbum`
+  const url = BaseUrl+`/musicapi/getalbum`
   const params = {
     albummid: albummid, //'001ZRoqG1ypbfW',  // ?albummid=001ZRoqG1ypbfW  专辑ID
     g_tk: 5381,
@@ -279,7 +281,7 @@ export const getalbumimgurl = (albummid) => {
 }
 //获取歌曲地址
 const getVkeys = (songmid) => {
-  let url = '/musicapi/getVkeys'
+  let url = BaseUrl+'/musicapi/getVkeys'
   const params = {
     g_tk: 5381,
     jsonpCallback: 'MusicJsonCallback9714604340045265',

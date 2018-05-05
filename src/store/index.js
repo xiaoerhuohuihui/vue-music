@@ -18,7 +18,7 @@ const state = {
   playIndex: 0,
   audio: {},
   musicDuration: 0,
-  ispause: false,
+  ispause: true,
   num:0,
   loop:'danqu',
   

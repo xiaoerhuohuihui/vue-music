@@ -61,6 +61,8 @@ export default {
     },
     playMusic(item) {
       this.$store.dispatch("addMusic", item);
+      this.$store.commit("changeIspause", false);
+      this.getAudio.autoplay = "autoplay"
     },
     getMore(){
       if (typeof this.showMore == 'boolean') {
@@ -77,7 +79,8 @@ export default {
       getPlayMusicSongmid: "getPlayMusicSongmid",
       getPlayIndex: "getPlayIndex",
       getPlayMusic: "getPlayMusic",
-      getPlayMusicList: "getPlayMusicList"
+      getPlayMusicList: "getPlayMusicList",
+      getAudio: "getAudio",
     })
   },
   watch: {

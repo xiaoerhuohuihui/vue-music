@@ -88,7 +88,6 @@ export default {
         } else {
           nextIndex = (this.getPlayIndex - 1) % this.getPlayMusicList.length;
         }
-        
         this.$store.commit("changePlayMusic", this.getPlayMusicList[nextIndex]);
       } else if (this.getLoop == "suiji") {
         let nextIndex = parseInt(
