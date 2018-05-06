@@ -3,6 +3,7 @@ import {
   jsonp
 } from "../api/jsonp";
 const BaseUrl = ``
+// const BaseUrl = `http://193.112.183.211:8080`  //写上api地址
 // const BaseUrl = `http://4d3kmh.natappfree.cc`
 //获取推荐
 export const getRecommend = () => {

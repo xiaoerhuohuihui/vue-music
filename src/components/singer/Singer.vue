@@ -1,6 +1,6 @@
 <template>
-  <div class="wrap">
-    <div ref='heightdiv' class="heightdiv">
+  <div class="wrap" >
+    <div ref='heightdiv'  class="heightdiv">
       <div v-for="(data, index) in singerList" class="singer-div" :key="index">
         <p class="title">{{getTitle(data.title)}}</p>
         <ul class="singer-ul">
@@ -25,6 +25,7 @@
 <script type="text/ecmascript-6">
 import Singer from "@/api/singer";
 import { getSinger } from "@/api/api";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -32,7 +33,8 @@ export default {
       hotList: [],
       sortList: [],
       fastList: [],
-      nowIndex:0
+      nowIndex:0,
+      scroll:document.querySelector(".music-body").scrollTop
     };
   },
   methods: {
@@ -117,11 +119,24 @@ export default {
       }
     },
     getSingerId(id) {
-      // console.log(id);
       this.$router.push({
         path: `/singer/${id}`
       });
+    },
+    getNowIndex(top){
+      let height = 0
+      let i = 0 
+      while (height < top) {
+        height += document.querySelectorAll(".singer-div")[i].scrollHeight
+        i++
+      }
+      this.nowIndex = i
     }
+  },
+  computed: {
+    ...mapGetters({
+      getScrollTop:'getScrollTop'
+    })
   },
   created() {
     getSinger()
@@ -138,6 +153,13 @@ export default {
       .catch(e => {
         console.log(e);
       })
+  },
+  watch: {
+    getScrollTop(newTop){
+      if(this.$route.path == '/singer'){
+        this.getNowIndex(newTop)
+      }
+    }
   }
 };
 </script>

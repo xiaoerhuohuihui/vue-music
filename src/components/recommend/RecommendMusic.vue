@@ -26,7 +26,6 @@ export default {
   created() {
     getRecomDisst(this.$route.params.id)
       .then(res => {
-          console.log(res);
           this.list = res.cdlist[0].songlist
       })
       .catch(e => {

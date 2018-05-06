@@ -1,18 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Recommend from 'com/recommend/Recommend'
-import RecommendMusic from 'com/recommend/RecommendMusic'
-import TopList from 'com/toplist/TopList'
-import MusicList from 'com/tools/MusicList'
-import Singer from 'com/singer/Singer'
-import SingerInfo from 'com/singer/SingerInfo'
-import Search from 'com/search/Search'
-
+const Recommend = () => import('com/recommend/Recommend')
+const RecommendMusic = () => import('com/recommend/RecommendMusic')
+const TopList = () => import('com/toplist/TopList')
+const MusicList = () => import('com/tools/MusicList')
+const Singer = () => import('com/singer/Singer')
+const SingerInfo = () => import('com/singer/SingerInfo')
+const Search = () => import('com/search/Search')
 
 Vue.use(Router)
 
 export default new Router({
-  mode:'history',
+  // mode:'history',
   routes: [
     {
       path: '/',

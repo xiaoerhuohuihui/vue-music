@@ -1,5 +1,5 @@
 <template>
-  <div class="search" ref="search">
+    <div class="search" ref="search">
     <input type="search" class="search-input" v-model="value" placeholder="搜索歌曲、歌手" @keyup.enter="search">
     <song-list :songlist='result' @getMoreMusic='getMoreMusic' :showMore='isShowMore'></song-list>
   </div>
@@ -73,6 +73,8 @@ export default {
   height: 30px;
   width: 100%;
   padding: 5px;
+  border: 1px solid rgb(0, 0, 0);
+  /* margin: 5px; */
   outline: none;
 }
 .search-list {
@@ -112,4 +114,5 @@ export default {
   line-height: 1.5;
   margin-top: -50px;
 }
+
 </style>

@@ -21,12 +21,15 @@ const state = {
   ispause: true,
   num:0,
   loop:'danqu',
-  
+  scrollTop:0
 }
 
 const getters = {
   getMusicUrl(state) {
     return state.musicUrl
+  },
+  getScrollTop(state) {
+    return state.scrollTop
   },
   getPlayIndex(state) {
     return state.playIndex
@@ -72,6 +75,9 @@ const mutations = {
 
   changeUrl(state, payload) {
     state.musicUrl = payload
+  },
+  changeScrollTop(state, payload) {
+    state.scrollTop = payload
   },
   changePlayIndex(state, payload) {
     state.playIndex = payload

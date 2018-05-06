@@ -1,5 +1,5 @@
 <template>
-    <div class="music-body">
+    <div class="music-body"  @scroll="scrollit">
         <div class="tabs">
             <ul>
                 <router-link to="/recommend" tag="li">
@@ -17,9 +17,7 @@
             </ul>
         </div>
         <keep-alive>
-            <!-- <transition name='view'> -->
-                <router-view></router-view>
-            <!-- </transition> -->
+            <router-view></router-view>
         </keep-alive>
     </div>
 </template>
@@ -29,9 +27,15 @@ export default {
   data() {
     return {};
   },
+  methods: {
+    scrollit(){
+      let sT = document.querySelector('.music-body').scrollTop
+      this.$store.commit('changeScrollTop', sT)
+    }  
+  },
   watch: {
     $route: function() {
-        document.querySelector('.music-body').scrollTop = 0
+     document.querySelector('.music-body').scrollTop = 0
     }
   }
 };
