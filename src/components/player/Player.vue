@@ -3,7 +3,7 @@
         <div class="player-img" @click="showPlayList">
             <img :src="getMusicPicUrl" alt="">
         </div>
-        <div class="song-info">
+        <div class="song-info" @click="showPlayList">
             <p>{{getName(getMusicName)}}</p>
             <span v-for="(item, index) in getMusicSinger" :key="index">{{getName(item.name)}}</span>
         </div>
@@ -189,7 +189,7 @@ export default {
 }
 .song-info {
   flex: 1;
-  padding: 10px 20px;
+  padding: 10px 0px 10px 20px;
 }
 .song-info span {
   /* margin-right: 5px; */

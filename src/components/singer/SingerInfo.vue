@@ -133,13 +133,15 @@ export default {
   border-radius: 15%;
 }
 .singer-info-p {
-  margin: 10px;
+  /* margin: 10px; */
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: wrap;
   text-indent: 1em;
   height: 25vh;
-  line-height: 2;
+  /* font-size: 4vh; */
+  line-height: 6vh;
+  /* padding: 5px; */
   /* display: -webkit-box; */
   /* 将对象作为弹性伸缩盒子模型显示。 */
   /* -webkit-box-orient: vertical; */

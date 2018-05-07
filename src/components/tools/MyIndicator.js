@@ -12,7 +12,10 @@ const createLoading = ()=> {
   const removeMyLoading = ()=> {
     let mydiv = document.querySelector('.loading')
     let app = document.querySelector('#app') 
-    app.removeChild(mydiv)
+    if (app && mydiv) {
+      app.removeChild(mydiv)
+    }
+    
     
   }
   
