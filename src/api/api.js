@@ -12,8 +12,8 @@ export const getRecommend = () => {
     g_tk: 5381,
     uin: 0,
     format: 'json',
-    inCharset: 'utf - 8',
-    outCharset: 'utf - 8',
+    inCharset: 'utf-8',
+    outCharset: 'utf-8',
     notice: 0,
     platform: 'h5',
     needNewCode: 1,
@@ -68,7 +68,7 @@ export const getRecomList = () => {
     hostUin: 0,
     format: `jsonp`,
     inCharset: `utf8`,
-    outCharset: `utf - 8`,
+    outCharset: `utf-8`,
     notice: 0,
     platform: `yqq`,
     needNewCode: 0,
@@ -180,8 +180,8 @@ export const getSingerInfo = (singerid, n = 15) => {
     g_tk: 5381,
     uin: 0,
     format: 'json',
-    inCharset: 'utf - 8',
-    outCharset: 'utf - 8',
+    inCharset: 'utf-8',
+    outCharset: 'utf-8',
     notice: 0,
     platform: 'h5page',
     needNewCode: 1,
@@ -321,3 +321,4 @@ export const getSongUrl = (songmid) => {
     return Promise.resolve(url)
   })
 }
+

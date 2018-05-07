@@ -74,7 +74,6 @@ export default {
     },
   },
   computed: {
-    
     ...mapGetters({
       getPlayMusicSongmid: "getPlayMusicSongmid",
       getPlayIndex: "getPlayIndex",

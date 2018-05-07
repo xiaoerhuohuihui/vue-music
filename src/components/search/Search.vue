@@ -30,27 +30,33 @@ export default {
   methods: {
     search() {
       this.isShowMore = true
+      this.$myInd.open()
       searchMusic(this.value, this.p)
         .then(res => {
           this.result = res.data.data.song.list;
           this.allSongNo = res.data.data.song.totalnum
+          this.$myInd.close()
         })
         .catch(err => {
           console.log(err);
         });
     },
     getMoreMusic() {
+      this.$myInd.open()
       if (this.result.length <= this.allSongNo) {
         this.p += 1;
         searchMusic(this.value, this.p)
           .then(res => {
             this.result = this.result.concat(res.data.data.song.list)
             this.allSongNo = res.data.data.song.totalnum
+            this.$myInd.close()
           })
           .catch(err => {
             console.log(err);
           });
         return;
+        // 3d1hLL05GDQN
+        // 2LBPoK4cE245
       }
       this.isShowMore = false;
     },

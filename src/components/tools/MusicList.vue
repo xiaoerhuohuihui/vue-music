@@ -25,12 +25,14 @@ export default {
     };
   },
   created() {
+    this.$myInd.open()
     getTopMusicList(this.$route.params.id)
       .then(res => {
         res.data.songlist.map(item => {
           this.list.push(item.data);
         });
         this.title = res.data.topinfo.ListName;
+        this.$myInd.close()
       })
       .catch(e => {
         console.log(e);

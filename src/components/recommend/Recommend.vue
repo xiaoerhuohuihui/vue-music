@@ -17,9 +17,10 @@ export default {
       sliderList:[],
     }
   },
-  mounted () {
+  created () {
     this._getRecomList()
     this._getRecommend()
+    this.$myInd.open()
   },
   methods: {
     _getRecomList(){
@@ -32,6 +33,7 @@ export default {
     _getRecommend(){
       getRecommend().then(res=>{
         this.sliderList = res.data.data.slider
+        this.$myInd.close()
       }).catch(err=>{
         console.log(err);
       })

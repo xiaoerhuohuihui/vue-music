@@ -139,6 +139,7 @@ export default {
     })
   },
   created() {
+    this.$myInd.open()
     getSinger()
       .then(res => {
         this.singerList = this.getSingerList(res.data.list);
@@ -149,6 +150,7 @@ export default {
             this.fastList.push(item.title);
           }
         })
+        this.$myInd.close()
       })
       .catch(e => {
         console.log(e);

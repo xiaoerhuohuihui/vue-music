@@ -21,7 +21,7 @@
 <script type="text/ecmascript-6">
 import { getSingerInfo } from "@/api/api";
 import SongList from "../tools/SongList";
-import { Toast } from "mint-ui";
+// import { Toast } from "mint-ui";
 export default {
   data() {
     return {
@@ -51,7 +51,7 @@ export default {
       return `https://y.gtimg.cn/music/photo_new/T001R150x150M000${mid}.jpg?max_age=2592000`;
     },
     getAllInfo() {
-      this.myToast = Toast({
+      this.myToast = this.$toast({
         message: this.singerinfo,
         className: "all-info",
         duration: -1
@@ -70,6 +70,7 @@ export default {
         this.title = res.data.singer_name;
         this.singerinfo = res.data.SingerDesc;
         this.allSongNo = res.data.total
+        this.$myInd.close()
       })
       .catch(e => {
         console.log(e);
@@ -85,6 +86,7 @@ export default {
     },
   },
   created() {
+    this.$myInd.open()
     this._getSingerInfo(this.$route.params.id, this.n)
   }
 };
@@ -154,6 +156,7 @@ export default {
   z-index: 999;
   background: rgba(12, 12, 12, 0.212);
 }
+
 .singer-info-body {
   width: 100%;
   position: absolute;

@@ -28,8 +28,10 @@ export default {
     }
   },
   created() {
+    this.$myInd.open()
     getTopList().then(res => {
       this.topList = res;
+      this.$myInd.close()
     });
   }
 };

@@ -7,13 +7,16 @@ import MintUI from "mint-ui"
 import swiper from 'swiper'
 import axios from 'axios'
 import { jsonp } from './api/jsonp'
+import { MyIndicator } from "com/tools/MyIndicator";
 import store from './store'
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 
+
 import 'mint-ui/lib/style.css'
 import 'swiper/dist/css/swiper.min.css'
+import '@/assets/css/index.css'
 
 Vue.use(MintUI)
 Vue.config.productionTip = false
@@ -22,6 +25,7 @@ Vue.prototype.$axios = axios
 Vue.prototype.$entities = entities
 Vue.prototype.$jsonp = jsonp
 Vue.prototype.$swiper = swiper
+Vue.prototype.$myInd = MyIndicator
 
 
 /* eslint-disable no-new */

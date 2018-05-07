@@ -24,9 +24,11 @@ export default {
     }
   },
   created() {
+    this.$myInd.open()
     getRecomDisst(this.$route.params.id)
       .then(res => {
           this.list = res.cdlist[0].songlist
+          this.$myInd.close()
       })
       .catch(e => {
         console.log(e);
@@ -71,6 +73,6 @@ export default {
   position: absolute;
   top: 10vh;
   height: 78vh;
-  overflow: scroll;
+  overflow: auto;
 }
 </style>

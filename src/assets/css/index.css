@@ -1,0 +1,99 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "微软雅黑";
+  }
+  ul,
+  ol,
+  li {
+    list-style: none;
+  }
+  body {
+    width: 100%;
+  }
+  #app {
+    position: relative;
+  }
+  .swiper-pagination-bullet-active{
+    background: rgb(85, 244, 255) !important;
+  }
+  .all-info {
+    width: 100%;
+    height: 50vh;
+    overflow: auto;
+    /* color: black;
+    background-color: rgb(223, 248, 238); */
+  }
+  .loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    /* width: 80px; */
+    height: 40px;
+    /* margin: 0 auto; */
+    /* margin-top: 100px; */
+    z-index: 19999;
+  }
+  .loading span {
+    display: inline-block;
+    width: 8px;
+    height: 100%;
+    border-radius: 4px;
+    background: rgba(52, 234, 247, 0.5);
+    animation: load 1s ease infinite;
+  }
+  @keyframes load {
+    0%,
+    100% {
+      height: 40px;
+      background: rgba(52, 234, 247, 0.5);
+    }
+    50% {
+      height: 70px;
+      margin: -15px 0;
+      background: rgba(52, 234, 247, 0.815);
+    }
+  }
+  .loading span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .loading span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  .loading span:nth-child(4) {
+    animation-delay: 0.6s;
+  }
+  .loading span:nth-child(5) {
+    animation-delay: 0.8s;
+  }
+  image[lazy="loading"] {
+    width: 40px;
+    height: 300px;
+    margin: auto;
+  }
+  .toleft {
+    /* transition: all .3s linear; */
+    animation: Toleft 0.5s linear;
+  }
+  .toright {
+    /* transition: all .3s linear; */
+    animation: Toright 0.5s linear;
+  }
+  @keyframes Toleft {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: 0;
+    }
+  }
+  @keyframes Toright {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: 0;
+    }
+  }
