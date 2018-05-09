@@ -1,35 +1,37 @@
 <template>
-    <div class="player">
-        <div class="player-img" @click="showPlayList">
-            <img :src="getMusicPicUrl" alt="">
-        </div>
-        <div class="song-info" @click="showPlayList">
-            <p>{{getName(getMusicName)}}</p>
-            <span v-for="(item, index) in getMusicSinger" :key="index">{{getName(item.name)}}</span>
-        </div>
-        <div class="icon" @click="isplay">
-            <img v-if="getIspause" src="@/assets/pause.png" alt="">
-            <img v-else src="@/assets/play.png" alt="">
-        </div>
-        <audio @timeupdate="setProgress" loop ref="audio" :src="getMusicUrl" @ended="playnext"></audio>
-        <transition name='playlist'>
-            <play-list :lyricNum='lyricNum' @goback='goback' :localLyric='localLyric' v-show="isShowPlayList" :isShowPlayList='isShowPlayList' :currentTime='currentTime'></play-list>
-        </transition>
+  <div class="player">
+    <div class="player-img" @click="showPlayList">
+      <img :src="getMusicPicUrl" alt="">
     </div>
+    <div class="song-info" @click="showPlayList">
+      <p>{{getName(getMusicName)}}</p>
+      <span v-for="(item, index) in getMusicSinger" :key="index">{{getName(item.name)}}</span>
+    </div>
+    <div class="icon" @click="isplay">
+      <img v-if="getIspause" src="@/assets/pause.png" alt="">
+      <img v-else src="@/assets/play.png" alt="">
+    </div>
+    <audio @timeupdate="setProgress" ref="audio" :src="getMusicUrl" @ended="playnext"></audio>
+    <transition name='playlist'>
+      <play-list @seek='seek' :lyricNum='lyricNum' @goback='goback' :localLyric='localLyric' v-show="isShowPlayList" :isShowPlayList='isShowPlayList' :currentTime='currentTime'></play-list>
+    </transition>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
 import { mapGetters, mapActions } from "vuex";
 import PlayList from "./PlayList";
-import { getSongUrl,getLyric } from "@/api/api";
-import Lyric from 'lyric-parser'
+import { getSongUrl, getLyric } from "@/api/api";
+import Lyric from "lyric-parser";
 export default {
   data() {
     return {
       isShowPlayList: false,
       currentTime: 0,
-      localLyric:[],
-      lyricNum:0
+      localLyric: [],
+      lyricNum: 0,
+      playing: false,
+      lyric: null
     };
   },
   methods: {
@@ -45,6 +47,12 @@ export default {
     },
     playnext() {
       if (this.getLoop == "danqu") {
+        this.$refs.audio.currentTime = 0
+        this.$refs.audio.play()
+         if (this.lyric) {
+        this.lyric.seek(0);
+      }
+        this.$store.commit("changeIspause", false);
         return;
       } else if (this.getLoop == "liebiao") {
         let nextIndex = (this.getPlayIndex + 1) % this.getPlayMusicList.length;
@@ -75,20 +83,23 @@ export default {
       this.$store.commit("changePlayIndex", tempIndex);
     },
     setProgress() {
+      this.playing = true;
       this.$store.commit("changeMusicDuration", this.$refs.audio.duration);
       this.currentTime = this.$refs.audio.currentTime;
     },
-    getName(name){
-      return this.$entities.decode(name)
+    getName(name) {
+      return this.$entities.decode(name);
     },
-    getLyricHtml(str){
-      var li = document.createElement('li')
-       li.innerHTML = str
-       return li.textContent || li.innerText
+    getLyricHtml(str) {
+      var li = document.createElement("li");
+      li.innerHTML = str;
+      return li.textContent || li.innerText;
     },
-    handleLyric(num, txt){
-      this.lyricNum = num.lineNum
-    },
+    seek(t) {
+      if (this.lyric) {
+        this.lyric.seek(t * 1000);
+      }
+    }
   },
   computed: {
     ...mapGetters({
@@ -100,7 +111,8 @@ export default {
       getMusicSinger: "getMusicSinger",
       getIspause: "getIspause",
       getLoop: "getLoop",
-      getPlayIndex: "getPlayIndex"
+      getPlayIndex: "getPlayIndex",
+      getMyMusicList: "getMyMusicList",
     }),
     ...mapActions({
       changeMusicUrl: "changeMusicUrl"
@@ -109,51 +121,53 @@ export default {
   components: {
     PlayList
   },
-  mounted () {
-    if (localStorage.getItem('list') && localStorage.getItem('playMusic')) {
-      let list = JSON.parse(localStorage.getItem('list'))
-      list.map(item=>{
-        this.$store.commit('changePlayMusicList',item)
-      })
-      let playMusic = JSON.parse(localStorage.getItem('playMusic'))
-      this.$store.commit('changePlayMusic',playMusic)
+  mounted() {
+    if (localStorage.getItem("list") && localStorage.getItem("playMusic")) {
+      let list = JSON.parse(localStorage.getItem("list"));
+      list.map(item => {
+        this.$store.commit("changePlayMusicList", item);
+      });
+      let playMusic = JSON.parse(localStorage.getItem("playMusic"));
+      this.$store.commit("changePlayMusic", playMusic);
     }
-    this.setAudioToStore()
+    
+    if (localStorage.getItem("mylist")) {
+        let mylist = JSON.parse(localStorage.getItem("mylist"));
+        this.$store.commit("changeMyMusicList", mylist);
+      }
+    this.setAudioToStore();
   },
   watch: {
     getPlayMusic(newMusic) {
       // this.$store.commit("changeIspause", false);
       this.songmid = newMusic.songmid;
       this.$store.dispatch("changeMusicUrl", this.songmid);
-      getLyric(newMusic.songid).then(res=>{
-        if (this.lyric) {
-        this.lyric.stop()
-      }
-        this.lyric = new Lyric(this.getLyricHtml(res.lyric), this.handleLyric)
-        this.localLyric = this.lyric.lines
-        this.lyric.play()
-      }).catch(e=>{
-        console.log(e);
-      })
+      getLyric(newMusic.songid)
+        .then(res => {
+          if (this.lyric) {
+            this.lyric.stop();
+          }
+          this.lyric = new Lyric(
+            this.getLyricHtml(res.lyric),
+            num => {
+              this.lyricNum = num.lineNum;
+            }
+          );
+          this.localLyric = this.lyric.lines;
+          if (this.playing) {
+            this.lyric.play();
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
       this.getIndex(newMusic);
     },
-    getIspause(newPlay){
+    getIspause(newPlay) {
       if (this.lyric) {
-        this.lyric.togglePlay()
+        this.lyric.togglePlay();
       }
-      
     },
-    getLoop(newLoop) {
-      if (newLoop == "danqu") {
-        this.$refs.audio.loop = true;
-      } else {
-        this.$refs.audio.loop = false;
-      }
-      console.log(this.$refs.audio.loop);
-    },
-    currentTime(newTime){
-      this.lyric.seek(newTime*1000)
-    }
   }
 };
 </script>

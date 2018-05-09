@@ -58,6 +58,13 @@ const Search = resolve => {
       MyIndicator.close()
     })
 }
+const MyList = resolve => {
+  MyIndicator.open();
+    require.ensure(['com/mylist/MyList'], () => {
+      resolve(require('com/mylist/MyList'))
+      MyIndicator.close()
+    })
+}
 
 Vue.use(Router)
 
@@ -103,6 +110,11 @@ export default new Router({
       path: '/search',
       name: 'Search',
       component: Search
+    },
+    {
+      path: '/mylist',
+      name: 'MyList',
+      component: MyList
     },
     
   ],

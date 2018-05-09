@@ -16,7 +16,7 @@
       <p class="no-lyric" v-if="!localLyric.length">没有歌词</p>
     </div>
     <div class="song-list" ref="songListDiv" @click.stop="chang">
-      <song-list :isShowPlayList='isShowPlayList' :songlist='getPlayMusicList'></song-list>
+      <song-list :isShowPlayList='isShowPlayList' :songlist='getSongList'></song-list>
     </div>
 
     <div class="control" @click.stop="change">
@@ -46,6 +46,7 @@
 
 <script type="text/ecmascript-6">
 import SongList from "../tools/SongList";
+import MySongList from './MySongList'
 import { mapGetters } from "vuex";
 import MusicProgress from "../tools/MusicProgress";
 export default {
@@ -131,6 +132,7 @@ export default {
       this.progress = this.currentTime / this.getAudio.duration * 100;
     },
     getPercent(percent) {
+      this.$emit('seek', this.getAudio.duration * percent)
       this.getAudio.currentTime = this.getAudio.duration * percent
     },
     isplay() {
@@ -163,7 +165,29 @@ export default {
       getLoop: "getLoop",
       getMusicPicUrl: "getMusicPicUrl",
       getPlayIndex: "getPlayIndex",
+      getMyMusicList: "getMyMusicList",
     }),
+    getSongList(){
+      let myList = []
+      let nowList = this.getPlayMusicList
+      nowList.map(item=>{
+       let f = this.getMyMusicList.filter(my=>{
+          return my.song.songmid == item.songmid
+        })[0]
+        if (f) {
+          myList.push({
+              song:item,
+              islike:true
+            })
+        }else{
+          myList.push({
+              song:item,
+              islike:false
+            })
+        }
+      })
+      return myList
+    },
     getDuration() {
       if (!isNaN(this.getMusicDuration)) {
         return this.translateTime(this.getMusicDuration);
@@ -175,7 +199,8 @@ export default {
   },
   components: {
     SongList,
-    MusicProgress
+    MusicProgress,
+    MySongList,
   },
   watch: {
     currentTime() {

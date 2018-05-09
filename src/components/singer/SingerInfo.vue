@@ -13,7 +13,8 @@
         <p class="singer-info-p" @click="getAllInfo">{{singerinfo}}</p>
       </div>
       <div class="all-info-wrap" @click.self="closeToast" v-if="showInfo"></div>
-      <song-list class="songlist" @getMoreMusic='getMoreMusic' :showMore='isShowMore' :songlist='list'></song-list>
+      <song-list class="songlist" @getMoreMusic='getMoreMusic' :showMore='isShowMore' 
+      :songlist='getSongList'></song-list>
     </div>
   </div>
 </template>
@@ -21,7 +22,7 @@
 <script type="text/ecmascript-6">
 import { getSingerInfo } from "@/api/api";
 import SongList from "../tools/SongList";
-// import { Toast } from "mint-ui";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -38,6 +39,32 @@ export default {
   },
   components: {
     SongList
+  },
+  computed: {
+   ...mapGetters({
+      getMyMusicList:'getMyMusicList'
+    }),
+    getSongList(){
+      let myList = []
+      let nowList = this.list
+      nowList.map(item=>{
+        let f = this.getMyMusicList.filter(my=>{
+          return my.song.songmid == item.songmid
+        })[0]
+        if (f) {
+          myList.push({
+              song:item,
+              islike:true
+            })
+        }else{
+          myList.push({
+              song:item,
+              islike:false
+            })
+        }
+      })
+      return myList
+    },
   },
   methods: {
     getSingerList(list) {

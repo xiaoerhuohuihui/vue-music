@@ -14,6 +14,9 @@
                 <router-link to="/search" tag="li">
                     <span>搜索</span>
                 </router-link>
+                <router-link to="/mylist" tag="li">
+                    <span>我</span>
+                </router-link>
             </ul>
         </div>
         <keep-alive>

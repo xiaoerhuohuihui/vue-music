@@ -1,23 +1,31 @@
 <template>
   <ul class="songinfo" ref="scrollUl">
     <!-- <transition-group name='songLi'> -->
-    <li ref="scrollLi" @click.stop="playMusic(item)" :class="{toleft:index%2==1,toright:index%2==0}" class="song " v-for="(item, index) in songlist" :key="index">
-      <div class="wrap" :class="{active:item.songmid==getPlayMusicSongmid}">
+    <li ref="scrollLi" 
+    :class="{toleft:index%2==1,toright:index%2==0}" 
+    class="song " v-for="(item, index) in getlist" :key="index">
+      <div class="wrap" 
+      @click.stop="playMusic(item.song)" 
+      :class="{active:item.song.songmid==getPlayMusicSongmid}">
         <div class="num-div">
           {{zeroNum(index)}}
         </div>
         <div class="info-div">
-          <p>{{getName(item.songname)}}</p>
-          <span v-for="(name, index) in item.singer" :key="index">
+          <p>{{getName(item.song.songname)}}</p>
+          <span v-for="(name, index) in item.song.singer" :key="index">
             {{getName(name.name)}}
           </span>
         </div>
       </div>
+      <div class="like" @click="changeLike(item,index)">
+            <img v-if="!item.islike" src="../../assets/like.png" alt="">
+            <img v-else src="../../assets/like2.png" alt="">
+        </div>
       <div class="bg-img">
-        <img v-lazy="geturl(item.albummid) " alt="">
+        <img v-lazy="geturl(item.song.albummid) " alt="">
       </div>
     </li>
-    <p class="more" @click="getMore" v-if="(songlist.length > 0) && showMore">点击加载更多</p>
+    <p class="more" @click="getMore" v-if="(getlist.length > 0) && showMore">点击加载更多</p>
     <!-- </transition-group> -->
   </ul>
 
@@ -31,7 +39,7 @@ export default {
   data() {
     return {
       isactive: false,
-      
+      mylist:[]
     };
   },
   props: {
@@ -72,6 +80,39 @@ export default {
     getName(name){
       return this.$entities.decode(name)
     },
+    changeLike(item,myindex){
+        let m = []
+        let myii = this.getMyMusicList
+        this.getlist.map((item, index)=>{
+            if (myindex == index) {
+                item.islike = !item.islike
+                if (item.islike) {
+                    myii.push(item)
+                    this.$store.commit('changeMyMusicList', myii)
+                }else{
+                    this.$messagebox.confirm('确定取消喜欢?').then(action => {
+                      let jj = null
+                    myii.map((myitem, si)=>{
+                        if (myitem.song.songmid == item.song.songmid) {
+                          jj = si
+                        }
+                    })
+                    let r = myii.splice(jj, 1)
+                    this.$store.commit('changeMyMusicList', myii)
+                    }).catch(e=>{
+                      item.islike = !item.islike
+                      return
+                    })
+                    
+                }
+            }
+            m.push(item)
+        })
+        this.mylist = m
+        
+        // console.log(this.getMyMusicList);
+        
+    } 
   },
   computed: {
     ...mapGetters({
@@ -80,7 +121,15 @@ export default {
       getPlayMusic: "getPlayMusic",
       getPlayMusicList: "getPlayMusicList",
       getAudio: "getAudio",
-    })
+      getMyMusicList:'getMyMusicList',
+    }),
+    getlist(){
+        if (this.mylist.length == 0) {
+            return this.songlist
+        }else{
+            return this.mylist 
+        }
+    },
   },
   watch: {
     isShowPlayList(newIsShow) {
@@ -89,6 +138,12 @@ export default {
           this.getPlayIndex * document.documentElement.clientHeight / 10;
         this.$refs.scrollUl.scrollTop = nextScroll;
       }
+    },
+    mylist(ne){
+        this.mylist = ne
+    },
+    songlist(ns){
+        this.mylist = ns
     }
   }
 };
@@ -109,15 +164,17 @@ export default {
   overflow: hidden;
 }
 .wrap {
-  /* flex: 1; */
-  width: 80%;
+  flex: 7.5;
+  /* width: 75%; */
   padding: 0 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 .bg-img {
-  width: 20%;
+  /* width: 20%; */
+  flex: 2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -127,11 +184,13 @@ export default {
 }
 .num-div {
   align-self: center;
-  width: 10%;
+  /* width: 10%; */
+  flex: 1;
 }
 .info-div {
   padding-left: 20px;
-  width: 90%;
+  /* width: 85%; */
+  flex: 8.5;
   overflow: hidden;
 }
 .info-div p {
@@ -147,7 +206,19 @@ export default {
   font-size: 0.8rem;
   color: rgb(129, 128, 121);
 }
-
+.like{
+  width: 4vh;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 3vh;
+  
+}
+.like img{
+  width: 4vh;
+  height: 4vh;
+}
 .bg-img img {
   width: 10vh;
   height: 10vh;

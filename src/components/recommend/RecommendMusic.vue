@@ -8,7 +8,8 @@
       </router-link>
     </mt-header>
     <div class="music-list-body">
-        <song-list :songlist='list'></song-list>
+        <song-list :songlist='getSongList'></song-list>
+        <!-- <song-list :songlist='list'></song-list> -->
     </div>
   </div>
 </template>
@@ -16,6 +17,7 @@
 <script type="text/ecmascript-6">
 import { getalbumimgurl, getRecomDisst } from "@/api/api";
 import SongList from "../tools/SongList";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -33,6 +35,32 @@ export default {
       .catch(e => {
         console.log(e);
       });
+  },
+  computed: {
+    ...mapGetters({
+      getMyMusicList:'getMyMusicList'
+    }),
+    getSongList(){
+      let myList = []
+      let nowList = this.list
+      nowList.map(item=>{
+        let f = this.getMyMusicList.filter(my=>{
+          return my.song.songmid == item.songmid
+        })[0]
+        if (f) {
+          myList.push({
+              song:item,
+              islike:true
+            })
+        }else{
+          myList.push({
+              song:item,
+              islike:false
+            })
+        }
+      })
+      return myList
+    },
   },
   components: {
     SongList

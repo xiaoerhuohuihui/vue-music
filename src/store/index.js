@@ -34,6 +34,9 @@ const getters = {
   getPlayIndex(state) {
     return state.playIndex
   },
+  getMyMusicList(state) {
+    return state.myMusicList
+  },
   getPlayMusicList(state) {
     return state.playMusicList
   },
@@ -75,6 +78,11 @@ const mutations = {
 
   changeUrl(state, payload) {
     state.musicUrl = payload
+  },
+  changeMyMusicList(state, payload) {
+    state.myMusicList = payload
+    localStorage.removeItem('mylist')
+    localStorage.setItem('mylist',JSON.stringify(state.myMusicList))
   },
   changeScrollTop(state, payload) {
     state.scrollTop = payload
