@@ -1,13 +1,14 @@
 <template>
     <div class="search" ref="search">
     <input type="search" class="search-input" v-model="value" placeholder="搜索歌曲、歌手" @keyup.enter="search">
-    <song-list :songlist='result' @getMoreMusic='getMoreMusic' :showMore='isShowMore'></song-list>
+    <song-list :songlist='getSongList' @getMoreMusic='getMoreMusic' :showMore='isShowMore'></song-list>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import { searchMusic } from "@/api/api";
 import SongList from "com/tools/SongList";
+import { mapGetters } from "vuex";
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 export default {
@@ -23,6 +24,32 @@ export default {
   },
   components: {
     SongList
+  },
+  computed: {
+    ...mapGetters({
+      getMyMusicList:'getMyMusicList'
+    }),
+    getSongList(){
+      let myList = []
+      let nowList = this.result
+      nowList.map(item=>{
+       let f = this.getMyMusicList.filter(my=>{
+          return my.song.songmid == item.songmid
+        })[0]
+        if (f) {
+          myList.push({
+              song:item,
+              islike:true
+            })
+        }else{
+          myList.push({
+              song:item,
+              islike:false
+            })
+        }
+      })
+      return myList
+    },
   },
   mounted() {
     window.addEventListener("scroll", this.scroll);
@@ -55,11 +82,10 @@ export default {
             console.log(err);
           });
         return;
-        // 3d1hLL05GDQN
-        // 2LBPoK4cE245
       }
       this.isShowMore = false;
     },
+    
     scroll() {
       var scrollTop =
         window.pageYOffset ||
