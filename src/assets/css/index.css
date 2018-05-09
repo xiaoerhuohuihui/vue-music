@@ -18,6 +18,10 @@
   .swiper-pagination-bullet-active{
     background: rgb(85, 244, 255) !important;
   }
+  .mint-msgbox-wrapper{
+    position: fixed;
+    z-index: 9999 !important;
+  }
   .all-info {
     width: 100%;
     height: 50vh;
