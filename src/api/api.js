@@ -316,7 +316,8 @@ const getVkeys = (songmid) => {
 export const getSongUrl = (songmid) => {
   let songurl = ''
   return getVkeys(songmid).then(res => {
-    let url = `http://58.16.42.161:9999/dl.stream.qqmusic.qq.com/C400${songmid}.m4a?vkey=${res}&guid=1595061394&uin=0&fromtag=66`
+    let url = `http://dl.stream.qqmusic.qq.com/C400${songmid}.m4a?vkey=${res}&guid=1595061394&uin=0&fromtag=66`
+    // let url = `http://58.16.42.161:9999/dl.stream.qqmusic.qq.com/C400${songmid}.m4a?vkey=${res}&guid=1595061394&uin=0&fromtag=66`
     // songurl =  url
     return Promise.resolve(url)
   })

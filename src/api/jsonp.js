@@ -13,3 +13,4 @@ export const jsonp = (url, params,name) => {
     })
   })
 }
+
