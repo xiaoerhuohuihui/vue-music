@@ -241,7 +241,7 @@ export default {
 }
 .goback-i{
   display: inline-block;
-  transform:scale(1.5,1.5)
+  transform:scale(2,1) rotate(270deg)
 }
 .bg-album{
   position: absolute;
