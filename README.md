@@ -17,6 +17,6 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
-# [点我预览](https://xiaoerhuohuihui.github.io/vue-music/)
+<!-- [点我预览](https://xiaoerhuohuihui.github.io/vue-music/) -->
 [点我预览](http://193.112.183.211/#/recommend)
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
