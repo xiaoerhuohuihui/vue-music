@@ -44,7 +44,9 @@ npm run build --report
 
 ## 播放
 
+<center>
 ![播放](https://github.com/xiaoerhuohuihui/vue-music/blob/gh-pages/pic/%E6%92%AD%E6%94%BE.jpg)
+</center>
 
 ## 歌词
 
